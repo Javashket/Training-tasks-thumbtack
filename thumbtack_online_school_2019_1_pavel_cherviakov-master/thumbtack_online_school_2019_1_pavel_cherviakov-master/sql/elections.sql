@@ -1,0 +1,53 @@
+DROP DATABASE IF EXISTS elections;
+CREATE DATABASE `elections`;
+USE `elections`;
+
+CREATE TABLE voter
+(
+    id         int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    firstname  char(30) NOT NULL,
+    lastname   char(30) NOT NULL,
+    patronymic char(30),
+    street     char(30) NOT NULL,
+    house      char(30) NOT NULL,
+    apartment  char(30),
+    login      char(30) NOT NULL,
+    password   char(30) NOT NULL,
+    token      char(50),
+    UNIQUE KEY voter (firstname,lastname,patronymic,street,house,apartment)
+)
+ ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE offer
+(
+    id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    voter_id int      NOT NULL,
+    content  char(50) NOT NULL,
+    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE
+)
+    ENGINE = INNODB
+    DEFAULT CHARSET = utf8;
+
+CREATE TABLE rating
+(
+    id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    voter_id int      NOT NULL,
+    rating  int NOT NULL,
+    offer_id int      NOT NULL,
+    UNIQUE KEY voter (id),
+    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE,
+    FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE
+)
+    ENGINE = INNODB
+    DEFAULT CHARSET = utf8;
+
+CREATE TABLE mayor_candidate
+(
+    id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    voter_id int      NOT NULL,
+#     consentOnNomination  char(50) NOT NULL,
+    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE
+)
+    ENGINE = INNODB
+    DEFAULT CHARSET = utf8;

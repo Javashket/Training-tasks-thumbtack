@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="073675c7-6393-49f3-a896-199f78326e2e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/ttschool.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/base/NumberOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/base/StringOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/boxes/v3/ArrayBox.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/boxes/v3/Box.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/boxes/v3/NamedBox.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/boxes/v3/PairBox.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/colors/v3/Color.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/colors/v3/ColorErrorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/colors/v3/ColorException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/jdbc/JdbcService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/jdbc/JdbcUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/model/Group.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/model/School.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/model/Subject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/model/Trainee.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/dao/CommonDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/dao/GroupDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/dao/SchoolDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/dao/SubjectDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/dao/TraineeDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/CommonDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/DaoImplBase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/GroupDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/SchoolDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/SubjectDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/daoimpl/TraineeDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/mappers/GroupMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/mappers/SchoolMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/mappers/SubjectMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/mappers/TraineeMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/database/mybatis/utils/MyBatisUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dao/DataBase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dao/VoterDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dao/VoterDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dto/MayorCandidate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dto/Offer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dto/RegisterVoterDtoRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/dto/Voter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/server/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/service/ElectionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/service/FileService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/service/VoterService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/Circle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/CircleFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/ColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/ColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/Ellipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/Point.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/Rectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v1/Square.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Circle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/CircleFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/ColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/ColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Ellipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Figure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Point.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Rectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v2/Square.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Circle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/CircleFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/ColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/ColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Ellipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Figure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Point.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Rectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/figures/v3/Square.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/file/FileService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v2/Colored.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v2/HasArea.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v2/Movable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v2/Resizable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v2/Stretchable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v3/Colored.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v3/HasArea.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v3/Movable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v3/Resizable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/iface/v3/Stretchable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/introduction/FirstSteps.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/matrix/MatrixNonSimilarRows.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v2/Auto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v2/House.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v2/Line.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v3/Auto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v3/House.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/misc/v3/Line.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/Group.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/School.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/Trainee.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/TraineeMap.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/TraineeQueue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/TrainingErrorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/thumbtack/school/ttschool/TrainingException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mybatis-config.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mysql.jdbc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/net/thumbtack/school/database/mybatis/mappers/SchoolMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/base/TestNumberOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/base/TestStringOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/boxes/v3/TestBoxes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/jdbc/TestJdbcCalls.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/jdbc/TestJdbcService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestBase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestFullSchoolOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestGroupTraineesOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestSchoolGroupSubjectsOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestSchoolGroupsOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestSchoolOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestSubjectOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/database/mybatis/TestTraineeOperations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/elections/TestServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestEllipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v1/TestSquare.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestEllipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestFigure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestSquare.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v2/TestTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestColoredCircle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestColoredRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestEllipse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestFigure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestRectangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestSquare.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/figures/v3/TestTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/file/TestFileService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/introduction/TestFirstSteps.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/matrix/TestMatrixNonSimilarRows.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v2/TestAuto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v2/TestHouse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v2/TestLine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v2/TestTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v3/TestAuto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v3/TestHouse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v3/TestLine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/misc/v3/TestTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/ttschool/TestGroup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/ttschool/TestSchool.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/ttschool/TestTrainee.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/ttschool/TestTraineeMap.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/thumbtack/school/ttschool/TestTraineeQueue.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1UDjk6CNCIJcpuwO2GAMX9ufWtU" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/net/thumbtack/school/elections/model" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\server" />
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\dao" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="net.thumbtack.school.elections" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.thumbtack.school.elections.mybatis.daoimpl" />
+      <recent name="net.thumbtack.school.elections.mybatis.dao" />
+      <recent name="net.thumbtack.school.elections.mybatis.utils" />
+      <recent name="net.thumbtack.school.elections.daoimpl" />
+      <recent name="net.thumbtack.school.elections.utils" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\model" />
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\test\java\net\thumbtack\school\elections" />
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\dao" />
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\dto" />
+      <recent name="C:\Users\Admin\Downloads\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov-master\thumbtack_online_school_2019_1_pavel_cherviakov\src\main\java\net\thumbtack\school\elections\server" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.net.thumbtack.school in lessons">
+    <configuration name="TestNumberOperations" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lessons" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.thumbtack.school.base.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="net.thumbtack.school.base" />
+      <option name="MAIN_CLASS_NAME" value="net.thumbtack.school.base.TestNumberOperations" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestSchool" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lessons" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.thumbtack.school.ttschool.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="net.thumbtack.school.ttschool" />
+      <option name="MAIN_CLASS_NAME" value="net.thumbtack.school.ttschool.TestSchool" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="net.thumbtack.school in lessons" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lessons" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.thumbtack.school.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="net.thumbtack.school" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="net.thumbtack.school.boxes.v3 in lessons" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lessons" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.thumbtack.school.boxes.v3.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="net.thumbtack.school.boxes.v3" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.net.thumbtack.school in lessons" />
+        <item itemvalue="JUnit.TestSchool" />
+        <item itemvalue="JUnit.net.thumbtack.school.boxes.v3 in lessons" />
+        <item itemvalue="JUnit.TestNumberOperations" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="073675c7-6393-49f3-a896-199f78326e2e" name="Default Changelist" comment="" />
+      <created>1574898200083</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1574898200083</updated>
+      <workItem from="1574898202975" duration="137000" />
+      <workItem from="1574900312041" duration="11000" />
+      <workItem from="1575236452050" duration="149000" />
+      <workItem from="1575236860466" duration="314000" />
+      <workItem from="1575237193235" duration="928000" />
+      <workItem from="1575718590836" duration="209000" />
+      <workItem from="1575738135919" duration="58000" />
+      <workItem from="1575899299695" duration="1734000" />
+      <workItem from="1575919234192" duration="408000" />
+      <workItem from="1575957939070" duration="4318000" />
+      <workItem from="1575968095820" duration="39000" />
+      <workItem from="1575987098430" duration="329000" />
+      <workItem from="1576042389016" duration="1937000" />
+      <workItem from="1576123978562" duration="11602000" />
+      <workItem from="1576265283922" duration="631000" />
+      <workItem from="1576267051893" duration="254000" />
+      <workItem from="1576267688664" duration="865000" />
+      <workItem from="1576296982679" duration="10297000" />
+      <workItem from="1576481234389" duration="3574000" />
+      <workItem from="1576566170499" duration="679000" />
+      <workItem from="1576582027246" duration="642000" />
+      <workItem from="1576743108005" duration="4949000" />
+      <workItem from="1576832430599" duration="707000" />
+      <workItem from="1576998107199" duration="24000" />
+      <workItem from="1577013006764" duration="4896000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="218" key="#SQL_Dialects" timestamp="1575967188197">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="552" y="218" key="#SQL_Dialects/0.40.1920.1040@0.40.1920.1040" timestamp="1575967188197" />
+    <state x="552" y="218" key="#Updates" timestamp="1576267030750">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="552" y="218" key="#Updates/0.40.1920.1040@0.40.1920.1040" timestamp="1576267030750" />
+    <state x="552" y="218" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576042725324">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="552" y="218" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.40.1920.1040@0.40.1920.1040" timestamp="1576042725319" />
+    <state x="765" y="275" key="#com.intellij.ide.util.MemberChooser" timestamp="1577017791179">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="765" y="275" key="#com.intellij.ide.util.MemberChooser/0.40.1920.1040@0.40.1920.1040" timestamp="1577017791179" />
+    <state x="808" y="450" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1576743206080">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="808" y="450" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.40.1920.1040@0.40.1920.1040" timestamp="1576743206080" />
+    <state x="640" y="287" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1576267032191">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="640" y="287" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.40.1920.1040@0.40.1920.1040" timestamp="1576267032191" />
+    <state x="223" y="485" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1577017889417">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="223" y="485" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.40.1920.1040@0.40.1920.1040" timestamp="1577017889417" />
+    <state x="728" y="419" width="464" height="291" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1576138668057">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="728" y="419" width="464" height="291" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.40.1920.1040@0.40.1920.1040" timestamp="1576138668057" />
+    <state x="756" y="441" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1577017890719">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="756" y="441" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.40.1920.1040@0.40.1920.1040" timestamp="1577017890719" />
+    <state x="595" y="40" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1577013315427">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="595" y="40" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.40.1920.1040@0.40.1920.1040" timestamp="1577013315427" />
+    <state x="740" y="314" key="FileChooserDialogImpl" timestamp="1577030862962">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="740" y="314" key="FileChooserDialogImpl/0.40.1920.1040@0.40.1920.1040" timestamp="1577030862962" />
+    <state width="1860" height="279" key="GridCell.Tab.0.bottom" timestamp="1575238700716">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="279" key="GridCell.Tab.0.bottom/0.40.1920.1040@0.40.1920.1040" timestamp="1575238700716" />
+    <state width="1860" height="279" key="GridCell.Tab.0.center" timestamp="1575238700715">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="279" key="GridCell.Tab.0.center/0.40.1920.1040@0.40.1920.1040" timestamp="1575238700715" />
+    <state width="1860" height="279" key="GridCell.Tab.0.left" timestamp="1575238700715">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="279" key="GridCell.Tab.0.left/0.40.1920.1040@0.40.1920.1040" timestamp="1575238700715" />
+    <state width="1860" height="279" key="GridCell.Tab.0.right" timestamp="1575238700715">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="279" key="GridCell.Tab.0.right/0.40.1920.1040@0.40.1920.1040" timestamp="1575238700715" />
+    <state width="196" height="457" key="HiddenNamespacesPopup" timestamp="1576042497816">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="196" height="457" key="HiddenNamespacesPopup/0.40.1920.1040@0.40.1920.1040" timestamp="1576042497816" />
+    <state x="424" y="231" key="SettingsEditor" timestamp="1576744066196">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="424" y="231" key="SettingsEditor/0.40.1920.1040@0.40.1920.1040" timestamp="1576744066196" />
+    <state x="681" y="301" width="570" height="524" key="StructurePopup" timestamp="1576745117693">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="681" y="301" width="570" height="524" key="StructurePopup/0.40.1920.1040@0.40.1920.1040" timestamp="1576745117693" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1576744583857">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.40.1920.1040@0.40.1920.1040" timestamp="1576744583857" />
+    <state x="342" y="181" key="new project wizard" timestamp="1577030865517">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="342" y="181" key="new project wizard/0.40.1920.1040@0.40.1920.1040" timestamp="1577030865517" />
+    <state x="616" y="260" key="run.anything.popup" timestamp="1575967044876">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="616" y="260" key="run.anything.popup/0.40.1920.1040@0.40.1920.1040" timestamp="1575967044876" />
+    <state x="623" y="265" width="672" height="678" key="search.everywhere.popup" timestamp="1576743621514">
+      <screen x="0" y="40" width="1920" height="1040" />
+    </state>
+    <state x="623" y="265" width="672" height="678" key="search.everywhere.popup/0.40.1920.1040@0.40.1920.1040" timestamp="1576743621514" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/lessons$TestSchool.ic" NAME="TestSchool Coverage Results" MODIFIED="1575237209867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>net.thumbtack.school.ttschool.*</FILTER>
+    </SUITE>
+  </component>
+</project>
