@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
+import net.thumbtack.school.database.model.Trainee;
 import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
 import net.thumbtack.school.elections.model.MayorCandidate;
 import org.apache.ibatis.session.SqlSession;
@@ -26,6 +27,21 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
             sqlSession.commit();
         }
         return mayorCandidate.getId();
+    }
+
+    @Override
+    public void batchInsert(List<MayorCandidate> mayorCandidates) {
+        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 
     @Override

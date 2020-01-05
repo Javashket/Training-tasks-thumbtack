@@ -1,11 +1,11 @@
 package net.thumbtack.school.elections.voter;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.elections.errors.voter.RegisterErrorCode;
+import net.thumbtack.school.elections.errors.voter.RegisterVoterErrorCode;
 import net.thumbtack.school.elections.mybatis.utils.MyBatisUtils;
-import net.thumbtack.school.elections.request.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.response.RegisterVoterDtoResponse;
-import net.thumbtack.school.elections.Server;
+import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.server.Server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TestRegister {
 
@@ -41,12 +42,19 @@ public class TestRegister {
 
     @Test
     public void testRegisterVoter(){
-        RegisterVoterDtoRequest request = new RegisterVoterDtoRequest("Иван","Иванов",
-                "Иванович","улица","дом", "56","logpass","passlogpass");
-        String jsonRequest = new Gson().toJson(request);
-        String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterVoterDtoResponse result = new Gson().fromJson(jsonResponse, RegisterVoterDtoResponse.class);
-        assertNotNull(result.getToken());
+        RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
+                "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
+        RegisterVoterDtoRequest request2 = new RegisterVoterDtoRequest("Иван2","Иванов2",
+                "Иванович2","улица2","дом2", "562","logpass2","passlogpass2");
+        String jsonRequest1 = new Gson().toJson(request1);
+        String jsonResponse1 = Server.registerVoter(jsonRequest1);
+        RegisterVoterDtoResponse result1 = new Gson().fromJson(jsonResponse1, RegisterVoterDtoResponse.class);
+        String jsonRequest2 = new Gson().toJson(request2);
+        String jsonResponse2 = Server.registerVoter(jsonRequest1);
+        assertNotNull(result1.getToken());
+        RegisterVoterDtoResponse result2 = new Gson().fromJson(jsonResponse2, RegisterVoterDtoResponse.class);
+        assertNotNull(result2.getToken());
+        assertNotEquals(result1.getToken(), result2.getToken());
     }
 
     @Test
@@ -55,9 +63,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullFirstName());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -67,9 +75,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullLastName());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -79,9 +87,9 @@ public class TestRegister {
                 "Иванович","","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullStreet());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -91,9 +99,9 @@ public class TestRegister {
                 "Иванович","улица","", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullHouse());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -103,9 +111,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullLogin());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -115,9 +123,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","pass","");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getNullPassword());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -127,9 +135,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthFirstName());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -139,9 +147,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthLastName());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -151,9 +159,9 @@ public class TestRegister {
                 "qwertyuiopaskfghjklzxcvbnmqwert","улица","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthPatronymic());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -163,9 +171,9 @@ public class TestRegister {
                 "Иванович","qwertyuiopaskfghjklzxcvbnmqwert","дом", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthStreet());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -175,9 +183,9 @@ public class TestRegister {
                 "Иванович","улица","qwertyuiopaskfghjklzxcvbnmqwert", "56","pass","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthHouse());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -187,9 +195,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "qwertyuiopaskfghjklzxcvbnmqwert","password","password");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthApartment());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -199,9 +207,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","qwertyuiopaskfghjklzxcvbnmqwert","pass");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthLogin());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -211,9 +219,9 @@ public class TestRegister {
                 "Иванович","улица","дом", "56","password","qwertyuiopaskfghjklzxcvbnmqwert");
         String jsonRequest = new Gson().toJson(request);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getLengthPassword());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -227,9 +235,9 @@ public class TestRegister {
         Server.registerVoter(jsonRequest);
         jsonRequest = new Gson().toJson(request2);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getSameLogin());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 
@@ -243,9 +251,9 @@ public class TestRegister {
         Server.registerVoter(jsonRequest);
         jsonRequest = new Gson().toJson(request2);
         String jsonResponse = Server.registerVoter(jsonRequest);
-        RegisterErrorCode expected = new RegisterErrorCode();
+        RegisterVoterErrorCode expected = new RegisterVoterErrorCode();
         expected.setErrorString(expected.getSameVoter());
-        RegisterErrorCode result = new Gson().fromJson(jsonResponse, RegisterErrorCode.class);
+        RegisterVoterErrorCode result = new Gson().fromJson(jsonResponse, RegisterVoterErrorCode.class);
         assertEquals(expected.getErrorString(), result.getErrorString());
     }
 }

@@ -5,15 +5,15 @@ import java.util.Objects;
 public class Rating {
 
     private int id;
-    private Voter voter;
+    private String token_evaluating_voter;
     private int rating;
 
     public Rating() {
 
     }
 
-    public Rating(Voter voter, int rating) {
-        this.voter = voter;
+    public Rating(String token_evaluating_voter, int rating) {
+        this.token_evaluating_voter = token_evaluating_voter;
         this.rating = rating;
     }
 
@@ -25,12 +25,12 @@ public class Rating {
         this.id = id;
     }
 
-    public Voter getVoter() {
-        return voter;
+    public String getToken_evaluating_voter() {
+        return token_evaluating_voter;
     }
 
-    public void setVoter(Voter voter) {
-        this.voter = voter;
+    public void setToken_evaluating_voter(String token_evaluating_voter) {
+        this.token_evaluating_voter = token_evaluating_voter;
     }
 
     public int getRating() {
@@ -47,12 +47,12 @@ public class Rating {
         if (!(o instanceof Rating)) return false;
         Rating rating1 = (Rating) o;
         return getRating() == rating1.getRating() &&
-                Objects.equals(getVoter(), rating1.getVoter());
+                Objects.equals(getToken_evaluating_voter(), rating1.getToken_evaluating_voter());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getVoter(), getRating());
+        return Objects.hash(getToken_evaluating_voter(), getRating());
     }
 }
 

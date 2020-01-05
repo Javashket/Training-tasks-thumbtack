@@ -1,23 +1,26 @@
 package net.thumbtack.school.elections.service;
 
 import com.google.gson.*;
-import net.thumbtack.school.elections.errors.voter.LoginErrorCode;
-import net.thumbtack.school.elections.errors.voter.LogoutErrorCode;
-import net.thumbtack.school.elections.errors.voter.RegisterErrorCode;
+import net.thumbtack.school.elections.errors.json.SyntaxJsonErrorCode;
+import net.thumbtack.school.elections.errors.voter.LoginVoterErrorCode;
+import net.thumbtack.school.elections.errors.voter.LogoutVoterErrorCode;
+import net.thumbtack.school.elections.errors.voter.RegisterVoterErrorCode;
+import net.thumbtack.school.elections.mybatis.dao.OfferDao;
+import net.thumbtack.school.elections.mybatis.dao.VoterDao;
 import net.thumbtack.school.elections.mybatis.daoimpl.OfferDaoImpl;
 import net.thumbtack.school.elections.mybatis.daoimpl.VoterDaoImpl;
-import net.thumbtack.school.elections.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
 import net.thumbtack.school.elections.model.Voter;
-import net.thumbtack.school.elections.request.TokenVoterDtoRequest;
-import net.thumbtack.school.elections.response.AllVotersDtoResponse;
-import net.thumbtack.school.elections.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.AllVotersDtoResponse;
+import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
 
 import java.util.UUID;
 
 public class VoterService {
 
-    private VoterDaoImpl voterDao;
-    private OfferDaoImpl offerDao;
+    private VoterDao voterDao;
+    private OfferDao offerDao;
 
     public VoterService() {
         this.voterDao = new VoterDaoImpl();
@@ -31,21 +34,21 @@ public class VoterService {
 //        if(Server.isStartingVoting()) {
 //            return "{'error':'регистрация закрыта. Идет голосование.'}";
 //        }
-//        String response = isValidJson(requestJsonString);
-//        if(!response.equals("")) {
-//            return response;
-//        }
+        String response = isValidJson(requestJson);
+        if(!response.equals("")) {
+            return response;
+        }
         if(!validateVoter(requestJson).equals("")) {
             return validateVoter(requestJson);
         }
 //        if(response.equals("")) {
             Voter voter = new Gson().fromJson(requestJson, Voter.class);
             voter.setTokenIsNewValue();
-            try {
+//            try {
                 voterDao.insert(voter);
-            }catch (IllegalArgumentException e) {
-                return "{'error':'" + e.getMessage() + "'}";
-            }
+//            }catch (IllegalArgumentException e) {
+//                return "{'error':'" + e.getMessage() + "'}";
+//            }
             return new Gson().toJson(new RegisterVoterDtoResponse(voter.getToken()));
 //        }
 
@@ -83,38 +86,38 @@ public class VoterService {
 ////        if(Server.isStartingServer()) {
 ////            return "{'error':'Сервер не запущен.'}";
 ////        }
-////        String response = isValidJson(requestJsonString);
-////        if(!response.equals("")) {
-////            return response;
-////        }
+        String response = isValidJson(requestJson);
+        if(!response.equals("")) {
+            return response;
+        }
         RegisterVoterDtoRequest voterDTO  = new Gson().fromJson(requestJson, RegisterVoterDtoRequest.class);
-        LoginErrorCode loginErrorCode = new LoginErrorCode();
+        LoginVoterErrorCode loginVoterErrorCode = new LoginVoterErrorCode();
         for (Voter voter : voterDao.getAll()) {
             if(voter.getLogin().equals(voterDTO.getLogin())) {
                 if(voter.getPassword().equals(voterDTO.getPassword())) {
                             voterDao.loginAndSetNewToken(voterDTO.getLogin(), UUID.randomUUID().toString());
                     return "";
                 } else {
-                    return new Gson().toJson(loginErrorCode.setErrorString(loginErrorCode.getErrorPassword()));
+                    return new Gson().toJson(loginVoterErrorCode.setErrorString(loginVoterErrorCode.getErrorPassword()));
                 }
             }
         }
-        return new Gson().toJson(loginErrorCode.setErrorString(loginErrorCode.getNotFoundLogin()));
+        return new Gson().toJson(loginVoterErrorCode.setErrorString(loginVoterErrorCode.getNotFoundLogin()));
     }
 
     public String logout(String jsonRequest) {
 //        if(Server.isStartingServer()) {
 //            return "{'error':'Сервер не запущен.'}";
 //        }
-//        String response = isValidJson(requestJsonString);
-//        if(!response.equals("")) {
-//            return response;
-//        }
+        String response = isValidJson(jsonRequest);
+        if(!response.equals("")) {
+            return response;
+        }
         TokenVoterDtoRequest tokenVoterDto = new Gson().fromJson(jsonRequest, TokenVoterDtoRequest.class);
         // добавить если token не найден либо не найден пользователь по токену
-        LogoutErrorCode logoutErrorCode = new LogoutErrorCode();
+        LogoutVoterErrorCode logoutVoterErrorCode = new LogoutVoterErrorCode();
         if(voterDao.getByToken(tokenVoterDto.getToken()) == null) {
-            return new Gson().toJson(logoutErrorCode.setErrorString(logoutErrorCode.getNotFoundToken()));
+            return new Gson().toJson(logoutVoterErrorCode.setErrorString(logoutVoterErrorCode.getNotFoundToken()));
         }
        voterDao.logoutByToken(tokenVoterDto.getToken());
 //        for(Offer offer : offerDao.getAll()) {
@@ -135,82 +138,87 @@ public class VoterService {
     }
 
     private String isValidJson(String json) {
-        Gson gson = new Gson();
         try {
-            gson.fromJson(json, Object.class);
-            return "";
+            JsonParser parser = new JsonParser();
+            parser.parse(json);
+            if (!json.contains("{")) {
+                throw new JsonSyntaxException(json);
+            }
         } catch(JsonSyntaxException ex) {
-            return "{'error':' ошибка синтаксиса JSON'}";
+            System.out.println("df");
+            SyntaxJsonErrorCode syntaxJsonErrorCode = new SyntaxJsonErrorCode();
+            return new Gson().toJson(syntaxJsonErrorCode.setErrorString(syntaxJsonErrorCode.getErrorSyntax()));
         }
+        return "";
     }
 
     private String checkLengthFieldsVoter(RegisterVoterDtoRequest voterDTO) {
-        RegisterErrorCode registerErrorCode = new RegisterErrorCode();
+        RegisterVoterErrorCode registerVoterErrorCode = new RegisterVoterErrorCode();
         if (voterDTO.getFirstName().length() > 30 || voterDTO.getFirstName().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthFirstName()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthFirstName()));
         }
         if (voterDTO.getLastName().length() > 30 || voterDTO.getLastName().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthLastName()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthLastName()));
         }
         if (voterDTO.getPatronymic().length() > 30 || voterDTO.getPatronymic().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthPatronymic()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthPatronymic()));
         }
         if (voterDTO.getStreet().length() > 30 || voterDTO.getStreet().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthStreet()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthStreet()));
         }
         if (voterDTO.getHouse().length() > 30 || voterDTO.getHouse().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthHouse()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthHouse()));
         }
         if (voterDTO.getApartment().length() > 30 || voterDTO.getApartment().length() < 1) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthApartment()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthApartment()));
         }
         if (voterDTO.getLogin().length() > 30 || voterDTO.getLogin().length() < 6) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthLogin()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthLogin()));
         }
         if (voterDTO.getPassword().length() > 30 || voterDTO.getPassword().length() < 6) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getLengthPassword()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getLengthPassword()));
         }
         return "";
     }
 
     private String checkIsEmptyFieldsVoter(RegisterVoterDtoRequest voterDTO) {
-        RegisterErrorCode registerErrorCode = new RegisterErrorCode();
+        RegisterVoterErrorCode registerVoterErrorCode = new RegisterVoterErrorCode();
         if (voterDTO.getFirstName().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullFirstName()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullFirstName()));
         }
         if (voterDTO.getLastName().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullLastName()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullLastName()));
         }
         if (voterDTO.getStreet().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullStreet()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullStreet()));
         }
         if (voterDTO.getHouse().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullHouse()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullHouse()));
         }
         if (voterDTO.getLogin().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullLogin()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullLogin()));
         }
         if (voterDTO.getPassword().isEmpty()) {
-            return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getNullPassword()));
+            return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getNullPassword()));
         }
         return "";
     }
 
     private String checkSameLogin(RegisterVoterDtoRequest voterDTO) {
-        RegisterErrorCode registerErrorCode = new RegisterErrorCode();
+        RegisterVoterErrorCode registerVoterErrorCode = new RegisterVoterErrorCode();
         for (Voter voter : voterDao.getAll()) {
             if(voter.getLogin().equals(voterDTO.getLogin())) {
-                return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getSameLogin()));
+                return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getSameLogin()));
             }
         }
         return "";
     }
 
     private String checkSameVoter(RegisterVoterDtoRequest voterDTO) {
-        RegisterErrorCode registerErrorCode = new RegisterErrorCode();
+        RegisterVoterErrorCode registerVoterErrorCode = new RegisterVoterErrorCode();
         for (Voter voter : voterDao.getAll()) {
             if (voter.hashCode() == voterDTO.hashCode()) {
-                return new Gson().toJson(registerErrorCode.setErrorString(registerErrorCode.getSameVoter()));
+                return new Gson().toJson(registerVoterErrorCode.setErrorString(registerVoterErrorCode.getSameVoter()));
             }
         }
         return "";

@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
+import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Rating;
 import net.thumbtack.school.elections.mybatis.dao.RatingDao;
@@ -27,6 +28,21 @@ public class RatingDaoImpl extends DaoImplBase implements RatingDao {
             sqlSession.commit();
         }
         return rating.getId();
+    }
+
+    @Override
+    public void batchInsert(List<MayorCandidate> mayorCandidates) {
+        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 
     @Override

@@ -1,12 +1,12 @@
 package net.thumbtack.school.elections.voter;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.elections.errors.voter.LogoutErrorCode;
+import net.thumbtack.school.elections.errors.voter.LogoutVoterErrorCode;
 import net.thumbtack.school.elections.mybatis.utils.MyBatisUtils;
-import net.thumbtack.school.elections.request.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.request.TokenVoterDtoRequest;
-import net.thumbtack.school.elections.response.RegisterVoterDtoResponse;
-import net.thumbtack.school.elections.Server;
+import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
+import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.server.Server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestLogout extends MyBatisUtils {
+public class TestLogout {
 
     private static boolean setUpIsDone = false;
 
@@ -48,10 +48,10 @@ public class TestLogout extends MyBatisUtils {
         RegisterVoterDtoResponse result = new Gson().fromJson(jsonResponse, RegisterVoterDtoResponse.class);
         TokenVoterDtoRequest request2 = new TokenVoterDtoRequest(result.getToken());
         jsonRequest = new Gson().toJson(request2);
-        LogoutErrorCode expected = new LogoutErrorCode();
+        LogoutVoterErrorCode expected = new LogoutVoterErrorCode();
         expected.setErrorString(expected.getNotFoundToken());
         assertEquals("", Server.logout(jsonRequest));
-        LogoutErrorCode actual = new Gson().fromJson(Server.logout(jsonRequest), LogoutErrorCode.class);
+        LogoutVoterErrorCode actual = new Gson().fromJson(Server.logout(jsonRequest), LogoutVoterErrorCode.class);
         assertEquals(expected.getErrorString(),actual.getErrorString());
     }
 

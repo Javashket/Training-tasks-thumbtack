@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
+import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Voter;
 import net.thumbtack.school.elections.mybatis.dao.OfferDao;
 import net.thumbtack.school.elections.model.Offer;
@@ -30,12 +31,38 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
     }
 
     @Override
+    public void batchInsert(List<MayorCandidate> mayorCandidates) {
+        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    @Override
     public Offer getById(int id) {
         LOGGER.debug("DAO get Offer by id {}", id);
         try (SqlSession sqlSession = getSession()){
             return getOfferMapper(sqlSession).getById(id);
         } catch (RuntimeException ex) {
             LOGGER.debug("Can't get Offer by id", ex);
+            throw ex;
+        }
+    }
+
+    @Override
+    public Offer getByContent(String content) {
+        LOGGER.debug("DAO get Offer by content {}", content);
+        try (SqlSession sqlSession = getSession()){
+            return getOfferMapper(sqlSession).getByContent(content);
+        } catch (RuntimeException ex) {
+            LOGGER.debug("Can't get Offer by content", ex);
             throw ex;
         }
     }

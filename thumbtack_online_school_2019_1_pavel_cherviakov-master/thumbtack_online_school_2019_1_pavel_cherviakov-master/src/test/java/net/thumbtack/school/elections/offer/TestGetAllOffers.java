@@ -1,9 +1,11 @@
-package net.thumbtack.school.elections.voter;
+package net.thumbtack.school.elections.offer;
 
 import com.google.gson.Gson;
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.mybatis.utils.MyBatisUtils;
 import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.dto.response.AllVotersDtoResponse;
+import net.thumbtack.school.elections.dto.response.AllOffersDtoResponse;
+import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
 import net.thumbtack.school.elections.server.Server;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class TestGetAllVoter {
+public class TestGetAllOffers {
 
     private static boolean setUpIsDone = false;
 
@@ -41,22 +43,21 @@ public class TestGetAllVoter {
     }
 
     @Test
-    public void testGetAllVoter(){
+    public void testGetOfferOrderByRating(){
         RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
                 "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
-        RegisterVoterDtoRequest request2 = new RegisterVoterDtoRequest("Иван","Иванов",
-                "Иванович2","улица2","дом2", "562","logpass2","passlogpass2");
-        RegisterVoterDtoRequest request3 = new RegisterVoterDtoRequest("Иван3","Иванов3",
-                "Иванович3","улица3","дом3", "563","logpass3","passlogpass3");
-        Server.registerVoter(new Gson().toJson(request1));
-        Server.registerVoter(new Gson().toJson(request2));
-        Server.registerVoter(new Gson().toJson(request3));
-        List<RegisterVoterDtoRequest> registerVoterDtoRequests = new ArrayList<>();
-        registerVoterDtoRequests.add(request1);
-        registerVoterDtoRequests.add(request2);
-        registerVoterDtoRequests.add(request3);
-        AllVotersDtoResponse actual = new Gson().fromJson(Server.getAllVoters(), AllVotersDtoResponse.class);
-        assertEquals(registerVoterDtoRequests.hashCode(), actual.getVoters().hashCode());
+        String jsonRequest1 = new Gson().toJson(request1);
+        String jsonResponse1 = Server.registerVoter(jsonRequest1);
+        RegisterVoterDtoResponse result1 = new Gson().fromJson(jsonResponse1, RegisterVoterDtoResponse.class);
+        String content = "Вымостить тротуарной плиткой центральную площадь.";
+        Offer request2 = new Offer(result1.getToken(), content);
+        String jsonRequest2 = new Gson().toJson(request2);
+        Server.addOffer(jsonRequest2);
+        String jsonResponse2 = Server.getAllOffers();
+        AllOffersDtoResponse allOffersDtoResponse = new Gson().fromJson(jsonResponse2, AllOffersDtoResponse.class);
+        List<Offer> expected = new ArrayList<>();
+        expected.add(request2);
+        assertEquals(expected, allOffersDtoResponse.getOffers());
     }
 
 }

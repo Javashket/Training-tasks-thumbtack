@@ -22,9 +22,9 @@ CREATE TABLE voter
 CREATE TABLE offer
 (
     id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    voter_id int      NOT NULL,
-    content  char(50) NOT NULL,
-    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE
+    author_token char(50) NOT NULL,
+    average_rating double NOT NULL,
+    content  char(50) NOT NULL
 )
     ENGINE = INNODB
     DEFAULT CHARSET = utf8;
@@ -32,11 +32,10 @@ CREATE TABLE offer
 CREATE TABLE rating
 (
     id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    voter_id int      NOT NULL,
+    token_evaluating_voter char(50)      NOT NULL,
     rating  int NOT NULL,
     offer_id int      NOT NULL,
     UNIQUE KEY voter (id),
-    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE,
     FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE
 )
     ENGINE = INNODB

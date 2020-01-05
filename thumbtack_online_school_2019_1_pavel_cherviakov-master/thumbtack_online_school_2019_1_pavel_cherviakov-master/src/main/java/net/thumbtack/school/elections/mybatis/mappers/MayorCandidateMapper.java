@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.mybatis.mappers;
 
+import net.thumbtack.school.database.model.Trainee;
 import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Voter;
 import org.apache.ibatis.annotations.*;
@@ -16,6 +17,15 @@ public interface MayorCandidateMapper {
     @Insert("INSERT INTO mayor_candidate (voter_id) VALUES (#{voter.id})")
     @Options(useGeneratedKeys = true)
     Integer insert(MayorCandidate mayorCandidate);
+
+    @Insert({"<script>",
+            "INSERT INTO mayor_candidate (voter_id) VALUES",
+            "<foreach item='item' collection='list' separator=','>",
+            "( #{item.voter.id})",
+            "</foreach>",
+            "</script>"})
+    @Options(useGeneratedKeys = true)
+    void batchInsert(List<MayorCandidate> mayorCandidates);
 
     @Select("SELECT * FROM mayor_candidate WHERE id = #{id}")
     @Results({
