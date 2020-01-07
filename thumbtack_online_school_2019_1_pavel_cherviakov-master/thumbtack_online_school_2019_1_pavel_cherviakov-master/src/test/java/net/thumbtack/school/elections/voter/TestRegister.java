@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -31,12 +33,12 @@ public class TestRegister {
     }
 
     @BeforeEach()
-    public void startServer() {
+    public void startServer() throws IOException {
         Server.startServer(null);
     }
 
     @AfterEach()
-    public void stopServer() {
+    public void stopServer() throws IOException {
         Server.stopServer(null);
     }
 

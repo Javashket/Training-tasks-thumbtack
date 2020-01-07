@@ -1,11 +1,18 @@
 package net.thumbtack.school.elections.service;
 
 import com.google.gson.*;
+import net.thumbtack.school.elections.dto.request.PutOnMayorDtoRequest;
+import net.thumbtack.school.elections.dto.response.AllCandidatesDtoResponse;
 import net.thumbtack.school.elections.errors.json.SyntaxJsonErrorCode;
+import net.thumbtack.school.elections.errors.mayorcandidate.AddMayorCandidateErrorCode;
 import net.thumbtack.school.elections.errors.offer.AddOfferErrorCode;
 import net.thumbtack.school.elections.errors.offer.RateOfferErrorCode;
+import net.thumbtack.school.elections.errors.voter.TokenVoterErrorCode;
+import net.thumbtack.school.elections.errors.voting.VotingOperationsErrorCode;
+import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Rating;
+import net.thumbtack.school.elections.model.Voter;
 import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
 import net.thumbtack.school.elections.mybatis.dao.OfferDao;
 import net.thumbtack.school.elections.mybatis.dao.RatingDao;
@@ -32,29 +39,49 @@ public class ElectionService {
         this.offerDao = new OfferDaoImpl();
         this.voterDao = new VoterDaoImpl();
         this.ratingDao = new RatingDaoImpl();
+        this.mayorCandidateDao = new MayorCandidateDaoImpl();
     }
 
     public String putOnMayor(String requestJson) {
-        if(Server.isStartingServer()) {
-            return "{'error':'Сервер не запущен.'}";
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
         }
         String response = isValidJson(requestJson);
         if(!response.equals("")) {
             return response;
         }
-        JsonParser parser = new JsonParser();
-        JsonElement jsonElement = parser.parse(requestJson);
-        JsonObject rootObject = jsonElement.getAsJsonObject();
-        String tokenVoter = rootObject.get("tokenVoter").getAsString();
-        String tokenNominationMayor = rootObject.get("tokenNominationMayor").getAsString();
-
-        return "";
+        // проверить токен выдвигающего и задвигающего
+        PutOnMayorDtoRequest putOnMayorDtoRequest = new Gson().fromJson(requestJson, PutOnMayorDtoRequest.class);
+        if(voterDao.getByToken(putOnMayorDtoRequest.getPushing_voter_token()) == null) {
+            TokenVoterErrorCode tokenVoterErrorCode = new TokenVoterErrorCode();
+            tokenVoterErrorCode.setErrorString(tokenVoterErrorCode.getNotFoundToken());
+            return new Gson().toJson(tokenVoterErrorCode);
+        }
+        Voter voter = new Voter();
+        for (Voter voter1 : voterDao.getAll()) {
+            if(voter1.hashCode() == putOnMayorDtoRequest.getHashcode_voter_on_mayor()) {
+                voter = voter1;
+                break;
+            }
+        }
+        if (!voter.getFirstName().equals("")) {
+            MayorCandidate mayorCandidate = new MayorCandidate(voter);
+            mayorCandidateDao.insert(mayorCandidate);
+            return "";
+        }
+        AddMayorCandidateErrorCode addMayorCandidateErrorCode = new AddMayorCandidateErrorCode();
+        addMayorCandidateErrorCode.setErrorString(addMayorCandidateErrorCode.getNotMayorCandidate());
+        return new Gson().toJson(addMayorCandidateErrorCode);
     }
 
     public String addOffer(String requestJson) {
-//        if(Server.isStartingServer()) {
-//            return "{'error':'Сервер не запущен.'}";
-//        }
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
+        }
         String response = isValidJson(requestJson);
         if(!response.equals("")) {
             return response;
@@ -79,6 +106,11 @@ public class ElectionService {
     }
 
     public String rateOffer(String requestJson) {
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
+        }
         RateOfferDtoRequest rateOfferDtoRequest  = new Gson().fromJson(requestJson, RateOfferDtoRequest.class);
         Rating rating = new Rating(rateOfferDtoRequest.getTokenEvaluating(), rateOfferDtoRequest.getRating());
         Offer offer = offerDao.getByContent(rateOfferDtoRequest.getContent());
@@ -119,9 +151,10 @@ public class ElectionService {
         return "";
     }
 
-    public String getCandidates() {
-
-        return new Gson().toJson(mayorCandidateDao.getAll());
+    public String getAllCandidates() {
+        AllCandidatesDtoResponse allCandidatesDtoResponse = new AllCandidatesDtoResponse();
+        allCandidatesDtoResponse.setMayorCandidates(mayorCandidateDao.getAll());
+        return new Gson().toJson(allCandidatesDtoResponse);
     }
 
     public String vote(String requestJson) {
@@ -156,10 +189,4 @@ public class ElectionService {
         return "electionService.addCandidate(requestJsonString)";
     }
 
-    public static String isStartingServer() {
-        if(Server.isStartingServer()) {
-            return "{'error':'Сервер не запущен.'}";
-        }
-        return "";
-    }
 }

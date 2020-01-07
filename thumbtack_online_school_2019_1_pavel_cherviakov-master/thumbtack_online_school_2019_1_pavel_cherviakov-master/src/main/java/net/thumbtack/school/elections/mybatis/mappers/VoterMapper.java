@@ -1,5 +1,6 @@
 package net.thumbtack.school.elections.mybatis.mappers;
 
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Voter;
 import org.apache.ibatis.annotations.*;
 
@@ -20,6 +21,18 @@ public interface VoterMapper {
             ", #{password},#{token})")
     @Options(useGeneratedKeys = true)
     Integer insert(Voter voter);
+
+    @Insert({"<script>",
+            "INSERT INTO voter (firstName, lastName, patronymic, street, house," +
+                    " apartment, login, password, token) VALUES",
+            "<foreach item='item' collection='list' separator=','>",
+            "( #{item.firstName}, #{item.lastName}, #{item.patronymic}," +
+                    "#{item.street}, #{item.house}, #{item.apartment}," +
+                    "#{item.login}, #{item.password}, #{item.token})",
+            "</foreach>",
+            "</script>"})
+    @Options(useGeneratedKeys = true)
+    void batchInsert(List<Voter> voters);
 
     @Select("SELECT * FROM voter WHERE token = #{token}")
     Voter getByToken(String token);

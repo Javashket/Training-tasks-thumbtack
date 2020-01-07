@@ -9,7 +9,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestJsonErrorSyntax {
 
@@ -27,12 +30,12 @@ public class TestJsonErrorSyntax {
     }
 
     @BeforeEach()
-    public void startServer() {
+    public void startServer() throws IOException {
         Server.startServer(null);
     }
 
     @AfterEach()
-    public void stopServer() {
+    public void stopServer() throws IOException {
         Server.stopServer(null);
     }
 
@@ -138,6 +141,33 @@ public class TestJsonErrorSyntax {
         assertEquals(expected1.getErrorString(), actual1.getErrorString());
         assertEquals(expected2.getErrorString(), actual2.getErrorString());
         assertEquals(expected3.getErrorString(), actual3.getErrorString());
+    }
+
+    @Test
+    public void testPutOnMayorOnErrorSyntaxJson() {
+        String jsonRequest1 = "";
+        String jsonRequest2 = "{";
+        String jsonRequest3 = "{'df':'df}";
+
+        String jsonResponse1 = Server.addOffer(jsonRequest1);
+        SyntaxJsonErrorCode actual1 = new Gson().fromJson(jsonResponse1, SyntaxJsonErrorCode.class);
+        SyntaxJsonErrorCode expected1 = new SyntaxJsonErrorCode();
+        expected1.setErrorString(expected1.getErrorSyntax());
+
+        String jsonResponse2 = Server.addOffer(jsonRequest2);
+        SyntaxJsonErrorCode actual2 = new Gson().fromJson(jsonResponse2, SyntaxJsonErrorCode.class);
+        SyntaxJsonErrorCode expected2 = new SyntaxJsonErrorCode();
+        expected2.setErrorString(expected2.getErrorSyntax());
+
+        String jsonResponse3 = Server.addOffer(jsonRequest3);
+        SyntaxJsonErrorCode actual3 = new Gson().fromJson(jsonResponse3, SyntaxJsonErrorCode.class);
+        SyntaxJsonErrorCode expected3 = new SyntaxJsonErrorCode();
+        expected3.setErrorString(expected3.getErrorSyntax());
+
+        assertEquals(expected1.getErrorString(), actual1.getErrorString());
+        assertEquals(expected2.getErrorString(), actual2.getErrorString());
+        assertEquals(expected3.getErrorString(), actual3.getErrorString());
+        fail();
     }
 
 }

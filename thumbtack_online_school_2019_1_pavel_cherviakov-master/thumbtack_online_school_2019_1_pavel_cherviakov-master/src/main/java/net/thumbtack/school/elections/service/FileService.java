@@ -2,6 +2,8 @@ package net.thumbtack.school.elections.service;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.dto.AllDataDto;
+import net.thumbtack.school.elections.model.Offer;
+import net.thumbtack.school.elections.model.Rating;
 import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
 import net.thumbtack.school.elections.mybatis.dao.OfferDao;
 import net.thumbtack.school.elections.mybatis.dao.RatingDao;
@@ -34,18 +36,29 @@ public class FileService {
         File file = new File(savedDataFileName);
         byte[] array = Files.readAllBytes(file.toPath());
         AllDataDto allDataDto = new Gson().fromJson(new String(array), AllDataDto.class);
-        mayorCandidateDao.insert(),
-                offerDao.getAll(),
-                voterDao.getAll(),
-                ratingDao.getAll()
+        if(!allDataDto.getVoters().isEmpty()) {
+            voterDao.batchInsert(allDataDto.getVoters());
+        }
+        if(!allDataDto.getMayorCandidates().isEmpty()) {
+            mayorCandidateDao.batchInsert(allDataDto.getMayorCandidates());
+        }
+        if(!allDataDto.getOffers().isEmpty()) {
+            offerDao.batchInsert(allDataDto.getOffers());
+            for(Offer offer : allDataDto.getOffers()) {
+                if(!offer.getRatings().isEmpty()) {
+                    for (Rating rating : offer.getRatings()) {
+                        ratingDao.insert(rating, offer);
+                    }
+                }
+            }
+        }
     }
 
     public void writeToFile(String saveDataFileName) throws IOException {
         AllDataDto allDataDto = new AllDataDto(
                 mayorCandidateDao.getAll(),
                 offerDao.getAll(),
-                voterDao.getAll(),
-                ratingDao.getAll()
+                voterDao.getAll()
         );
         String saveData = new Gson().toJson(allDataDto);
         File file = new File(saveDataFileName);

@@ -1,6 +1,5 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
-import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Rating;
 import net.thumbtack.school.elections.mybatis.dao.RatingDao;
@@ -31,13 +30,13 @@ public class RatingDaoImpl extends DaoImplBase implements RatingDao {
     }
 
     @Override
-    public void batchInsert(List<MayorCandidate> mayorCandidates) {
-        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+    public void batchInsert(List<Rating> ratings) {
+        LOGGER.debug("DAO insert Ratings {}", ratings);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+                getRatingMapper(sqlSession).batchInsert(ratings);
             } catch (RuntimeException ex) {
-                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                LOGGER.debug("Can't insert Ratings {}", ratings, ex);
                 sqlSession.rollback();
                 throw ex;
             }
@@ -52,6 +51,27 @@ public class RatingDaoImpl extends DaoImplBase implements RatingDao {
             return getRatingMapper(sqlSession).getById(id);
         } catch (RuntimeException ex) {
             LOGGER.debug("Can't get Rating by id", ex);
+            throw ex;
+        }
+    }
+
+    @Override
+    public void deleteById(int id) {
+        LOGGER.debug("DAO delete Rating by id {}", id);
+        try (SqlSession sqlSession = getSession()){
+            getRatingMapper(sqlSession).deleteById(id);
+        } catch (RuntimeException ex) {
+            LOGGER.debug("Can't delete Rating by id", ex);
+            throw ex;
+        }
+    }
+
+    public Rating getByOfferId(int id) {
+        LOGGER.debug("DAO get Rating by offer_id {}", id);
+        try (SqlSession sqlSession = getSession()){
+            return getRatingMapper(sqlSession).getByOfferId(id);
+        } catch (RuntimeException ex) {
+            LOGGER.debug("Can't get Rating by offer_id", ex);
             throw ex;
         }
     }

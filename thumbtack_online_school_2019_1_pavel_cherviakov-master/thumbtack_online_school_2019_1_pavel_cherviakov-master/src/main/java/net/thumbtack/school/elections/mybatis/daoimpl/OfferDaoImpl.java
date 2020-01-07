@@ -31,13 +31,13 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
     }
 
     @Override
-    public void batchInsert(List<MayorCandidate> mayorCandidates) {
-        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+    public void batchInsert(List<Offer> offers) {
+        LOGGER.debug("DAO insert Offers {}", offers);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+                getOfferMapper(sqlSession).batchInsert(offers);
             } catch (RuntimeException ex) {
-                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                LOGGER.debug("Can't insert Offers {}", offers, ex);
                 sqlSession.rollback();
                 throw ex;
             }
@@ -52,6 +52,16 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
             return getOfferMapper(sqlSession).getById(id);
         } catch (RuntimeException ex) {
             LOGGER.debug("Can't get Offer by id", ex);
+            throw ex;
+        }
+    }
+    @Override
+    public void updateSetEmptyAuthor(String content) {
+        LOGGER.debug("DAO update Offer set empty author by content {}", content);
+        try (SqlSession sqlSession = getSession()){
+            getOfferMapper(sqlSession).updateSetEmptyAuthor(content);
+        } catch (RuntimeException ex) {
+            LOGGER.debug("Can't update Offer set empty author by content", ex);
             throw ex;
         }
     }

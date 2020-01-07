@@ -18,6 +18,10 @@ public interface RatingDao {
 
     List<Rating> getByOffer(Offer offer);
 
+    Rating getByOfferId(int id);
+
     List<Rating> getAll();
+
+    void deleteById(int id);
 
 }

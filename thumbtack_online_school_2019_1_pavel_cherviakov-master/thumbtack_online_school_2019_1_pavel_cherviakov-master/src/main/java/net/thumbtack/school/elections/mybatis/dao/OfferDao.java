@@ -20,4 +20,6 @@ public interface OfferDao {
     Offer getById(int id);
 
     Offer getByContent(String content);
+
+    void updateSetEmptyAuthor(String content);
 }

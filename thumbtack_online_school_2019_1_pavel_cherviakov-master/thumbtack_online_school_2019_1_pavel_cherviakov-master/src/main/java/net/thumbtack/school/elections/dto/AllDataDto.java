@@ -12,16 +12,16 @@ public class AllDataDto {
     private List<MayorCandidate> mayorCandidates;
     private List<Offer> offers;
     private List<Voter> voters;
-    private List<Rating> ratings;
+//    private List<Rating> ratings;
 
     public AllDataDto() {
     }
 
-    public AllDataDto(List<MayorCandidate> mayorCandidates, List<Offer> offers, List<Voter> voters, List<Rating> ratings) {
+    public AllDataDto(List<MayorCandidate> mayorCandidates, List<Offer> offers, List<Voter> voters) {
         this.mayorCandidates = mayorCandidates;
         this.offers = offers;
         this.voters = voters;
-        this.ratings = ratings;
+//        this.ratings = ratings;
     }
 
     public List<MayorCandidate> getMayorCandidates() {
@@ -48,11 +48,11 @@ public class AllDataDto {
         this.voters = voters;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
+//    public List<Rating> getRatings() {
+//        return ratings;
+//    }
 
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-    }
+//    public void setRatings(List<Rating> ratings) {
+//        this.ratings = ratings;
+//    }
 }

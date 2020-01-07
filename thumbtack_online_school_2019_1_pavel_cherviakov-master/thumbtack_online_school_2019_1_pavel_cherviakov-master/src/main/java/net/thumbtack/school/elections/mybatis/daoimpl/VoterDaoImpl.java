@@ -1,9 +1,7 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
-import net.thumbtack.school.elections.model.MayorCandidate;
-import net.thumbtack.school.elections.mybatis.dao.VoterDao;
 import net.thumbtack.school.elections.model.Voter;
-import org.apache.ibatis.annotations.Param;
+import net.thumbtack.school.elections.mybatis.dao.VoterDao;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +29,13 @@ public class VoterDaoImpl extends DaoImplBase implements VoterDao {
     }
 
     @Override
-    public void batchInsert(List<MayorCandidate> mayorCandidates) {
-        LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
+    public void batchInsert(List<Voter> voters) {
+        LOGGER.debug("DAO insert Voters {}", voters);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getMayorCandidateMapper(sqlSession).batchInsert(mayorCandidates);
+                getVoterMapper(sqlSession).batchInsert(voters);
             } catch (RuntimeException ex) {
-                LOGGER.debug("Can't insert MayorCandidates {}", mayorCandidates, ex);
+                LOGGER.debug("Can't insert Voters {}", voters, ex);
                 sqlSession.rollback();
                 throw ex;
             }

@@ -65,6 +65,10 @@ public class Voter {
         this.token = "";
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setTokenIsNewValue() {
         this.token = UUID.randomUUID().toString();
     }

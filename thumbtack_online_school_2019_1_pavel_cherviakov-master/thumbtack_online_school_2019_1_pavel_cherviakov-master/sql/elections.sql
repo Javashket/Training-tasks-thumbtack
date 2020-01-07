@@ -22,7 +22,7 @@ CREATE TABLE voter
 CREATE TABLE offer
 (
     id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    author_token char(50) NOT NULL,
+    author_token char(50) ,
     average_rating double NOT NULL,
     content  char(50) NOT NULL
 )

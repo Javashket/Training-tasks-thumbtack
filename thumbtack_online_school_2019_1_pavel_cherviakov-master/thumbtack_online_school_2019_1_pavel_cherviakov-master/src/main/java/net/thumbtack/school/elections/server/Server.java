@@ -5,6 +5,8 @@ import net.thumbtack.school.elections.mybatis.daoimpl.CommonDaoImpl;
 import net.thumbtack.school.elections.service.*;
 import org.apache.commons.cli.*;
 
+import java.io.IOException;
+
 public class Server {
 
     private static ElectionService electionService;
@@ -20,7 +22,7 @@ public class Server {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Options options = new Options();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
@@ -49,12 +51,13 @@ public class Server {
         }
     }
 
-    public static void startServer(String savedDataFileName) {
+    public static void startServer(String savedDataFileName) throws IOException {
         if(!turnOn) {
             electionService = new ElectionService();
             voterService = new VoterService();
             fileService = new FileService();
             commonDao = new CommonDaoImpl();
+            commonDao.clear();
             if(savedDataFileName != null) {
                 fileService.readFromFile(savedDataFileName);
             }
@@ -63,7 +66,7 @@ public class Server {
         }
     }
 
-    public static void stopServer(String saveDataFileName) {
+    public static void stopServer(String saveDataFileName) throws IOException {
         if(turnOn) {
             if(saveDataFileName != null) {
                 fileService.writeToFile(saveDataFileName);
@@ -100,10 +103,6 @@ public class Server {
         return voterService.login(jsonRequest);
     }
 
-    public static String recoveryRegistration(String jsonRequest) {
-        return voterService.login(jsonRequest);
-    }
-
     public static String registerVoter(String jsonRequest) {
         return voterService.registerVoter(jsonRequest);
     }
@@ -132,8 +131,8 @@ public class Server {
         return electionService.addCandidate(jsonRequest);
     }
 
-    public static String getCandidates() {
-        return electionService.getCandidates();
+    public static String getAllCandidates() {
+        return electionService.getAllCandidates();
     }
 
     public static String  getAllVoters() {
@@ -144,7 +143,7 @@ public class Server {
         return electionService.getAllOffers();
     }
 
-    public static String summarize() {
-        return electionService.getCandidates();
-    }
+//    public static String summarize() {
+//        return electionService.getCandidates();
+//    }
 }

@@ -5,15 +5,21 @@ import net.thumbtack.school.elections.errors.json.SyntaxJsonErrorCode;
 import net.thumbtack.school.elections.errors.voter.LoginVoterErrorCode;
 import net.thumbtack.school.elections.errors.voter.LogoutVoterErrorCode;
 import net.thumbtack.school.elections.errors.voter.RegisterVoterErrorCode;
+import net.thumbtack.school.elections.errors.voting.VotingOperationsErrorCode;
+import net.thumbtack.school.elections.model.Offer;
+import net.thumbtack.school.elections.model.Rating;
 import net.thumbtack.school.elections.mybatis.dao.OfferDao;
+import net.thumbtack.school.elections.mybatis.dao.RatingDao;
 import net.thumbtack.school.elections.mybatis.dao.VoterDao;
 import net.thumbtack.school.elections.mybatis.daoimpl.OfferDaoImpl;
+import net.thumbtack.school.elections.mybatis.daoimpl.RatingDaoImpl;
 import net.thumbtack.school.elections.mybatis.daoimpl.VoterDaoImpl;
 import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
 import net.thumbtack.school.elections.model.Voter;
 import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
 import net.thumbtack.school.elections.dto.response.AllVotersDtoResponse;
 import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.server.Server;
 
 import java.util.UUID;
 
@@ -21,19 +27,20 @@ public class VoterService {
 
     private VoterDao voterDao;
     private OfferDao offerDao;
+    private RatingDao ratingDao;
 
     public VoterService() {
         this.voterDao = new VoterDaoImpl();
         this.offerDao = new OfferDaoImpl();
+        this.ratingDao = new RatingDaoImpl();
     }
 
     public String registerVoter(String requestJson) {
-//        if(Server.isStartingServer()) {
-//            return "{'error':'Сервер не запущен.'}";
-//        }
-//        if(Server.isStartingVoting()) {
-//            return "{'error':'регистрация закрыта. Идет голосование.'}";
-//        }
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
+        }
         String response = isValidJson(requestJson);
         if(!response.equals("")) {
             return response;
@@ -41,27 +48,13 @@ public class VoterService {
         if(!validateVoter(requestJson).equals("")) {
             return validateVoter(requestJson);
         }
-//        if(response.equals("")) {
-            Voter voter = new Gson().fromJson(requestJson, Voter.class);
-            voter.setTokenIsNewValue();
-//            try {
-                voterDao.insert(voter);
-//            }catch (IllegalArgumentException e) {
-//                return "{'error':'" + e.getMessage() + "'}";
-//            }
-            return new Gson().toJson(new RegisterVoterDtoResponse(voter.getToken()));
-//        }
-
+        Voter voter = new Gson().fromJson(requestJson, Voter.class);
+        voter.setTokenIsNewValue();
+        voterDao.insert(voter);
+        return new Gson().toJson(new RegisterVoterDtoResponse(voter.getToken()));
     }
 
     private String validateVoter(String jsonRequest) {
-//        if(Server.isStartingServer()) {
-//            return "{'error':'Сервер не запущен.'}";
-//        }
-//        String response = isValidJson(jsonRequest);
-//        if(!response.equals("")) {
-//            return response;
-//        }
         RegisterVoterDtoRequest voterDTO = new Gson().fromJson(jsonRequest, RegisterVoterDtoRequest.class);
         String checkIsEmptyResult = checkIsEmptyFieldsVoter(voterDTO);
         if(!checkIsEmptyResult.equals("")) {
@@ -83,9 +76,11 @@ public class VoterService {
     }
 
     public String login(String requestJson) {
-////        if(Server.isStartingServer()) {
-////            return "{'error':'Сервер не запущен.'}";
-////        }
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
+        }
         String response = isValidJson(requestJson);
         if(!response.equals("")) {
             return response;
@@ -106,34 +101,31 @@ public class VoterService {
     }
 
     public String logout(String jsonRequest) {
-//        if(Server.isStartingServer()) {
-//            return "{'error':'Сервер не запущен.'}";
-//        }
+        if(Server.isStartingVoting()) {
+            VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
+            votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
+            return new Gson().toJson(votingOperationsErrorCode);
+        }
         String response = isValidJson(jsonRequest);
         if(!response.equals("")) {
             return response;
         }
         TokenVoterDtoRequest tokenVoterDto = new Gson().fromJson(jsonRequest, TokenVoterDtoRequest.class);
-        // добавить если token не найден либо не найден пользователь по токену
         LogoutVoterErrorCode logoutVoterErrorCode = new LogoutVoterErrorCode();
         if(voterDao.getByToken(tokenVoterDto.getToken()) == null) {
             return new Gson().toJson(logoutVoterErrorCode.setErrorString(logoutVoterErrorCode.getNotFoundToken()));
         }
        voterDao.logoutByToken(tokenVoterDto.getToken());
-//        for(Offer offer : offerDao.getAll()) {
-//            // удалить автора если автор
-//            if () {
-//
-//            }
-//            // удалить оценки если ставил их
-//            if() {
-//
-//            }
-//        }
-//        // удалить оценки предложений
-////        voterDao.delete(voterDao.getByToken(token));
-////        voterDao.insert(voter);
-//        //обнулить авторство предложений
+        for(Offer offer : offerDao.getAll()) {
+            if (offer.getAuthor_token().equals(tokenVoterDto.getToken())) {
+                offerDao.updateSetEmptyAuthor(offer.getContent());
+            }
+            for(Rating rating : ratingDao.getAll()) {
+                if (rating.getToken_evaluating_voter().equals(tokenVoterDto.getToken())) {
+                    ratingDao.deleteById(rating.getId());
+                }
+            }
+        }
         return "";
     }
 

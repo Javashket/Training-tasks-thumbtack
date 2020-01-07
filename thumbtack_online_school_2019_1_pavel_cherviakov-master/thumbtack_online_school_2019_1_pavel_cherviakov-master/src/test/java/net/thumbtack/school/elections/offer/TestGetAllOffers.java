@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +34,12 @@ public class TestGetAllOffers {
     }
 
     @BeforeEach()
-    public void startServer() {
+    public void startServer() throws IOException {
         Server.startServer(null);
     }
 
     @AfterEach()
-    public void stopServer() {
+    public void stopServer() throws IOException {
         Server.stopServer(null);
     }
 

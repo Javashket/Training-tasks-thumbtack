@@ -18,8 +18,23 @@ public interface RatingMapper {
     @Options(useGeneratedKeys = true, keyProperty = "rating.id")
     Integer insert(@Param("rating") Rating rating, @Param("offer") Offer offer);
 
-    @Select("SELECT * FROM rating WHERE id = #{id}")
+    @Insert({"<script>",
+            "INSERT INTO rating (token_evaluating_voter, rating, offer_id) VALUES",
+            "<foreach item='item' collection='list' separator=','>",
+            "( #{item.token_evaluating_voter}, #{item.rating}, #{item.offer.id})",
+            "</foreach>",
+            "</script>"})
+    @Options(useGeneratedKeys = true, keyProperty = "rating.id")
+    void batchInsert(List<Rating> ratings);
+
+    @Select("DELETE FROM rating WHERE id = #{id}")
     Rating getById(int id);
+
+    @Delete("SELECT * FROM rating WHERE id = #{id}")
+    void deleteById(int id);
+
+    @Select("SELECT * FROM rating WHERE offer_id = #{id}")
+    Rating getByOfferId(int id);
 
     @Select("SELECT * FROM rating WHERE offer_id = #{id}")
     List <Rating> getByOffer(Offer offer);

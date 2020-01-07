@@ -21,7 +21,7 @@ public interface MayorCandidateMapper {
     @Insert({"<script>",
             "INSERT INTO mayor_candidate (voter_id) VALUES",
             "<foreach item='item' collection='list' separator=','>",
-            "( #{item.voter.id})",
+            "(#{item.voter.id})",
             "</foreach>",
             "</script>"})
     @Options(useGeneratedKeys = true)
@@ -30,11 +30,15 @@ public interface MayorCandidateMapper {
     @Select("SELECT * FROM mayor_candidate WHERE id = #{id}")
     @Results({
             @Result(property = "id", column = "id"),
-            @Result(property = "voter", column = "voter_id", javaType = Voter.class,
+            @Result(property = "voter", column = "id", javaType = Voter.class,
                     one = @One(select = "net.thumbtack.school.elections.mybatis.mappers.VoterMapper.getById"))})
     MayorCandidate getById(int id);
 
     @Select("SELECT * FROM  mayor_candidate")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "voter", column = "id", javaType = Voter.class,
+                    many = @Many(select = "net.thumbtack.school.elections.mybatis.mappers.VoterMapper.getById"))})
     List<MayorCandidate> getAll();
 
     @Delete("DELETE FROM  mayor_candidate WHERE id = #{voter.id}")
