@@ -1,34 +1,24 @@
 package net.thumbtack.school.elections.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class MayorCandidate {
 
     private int id;
-    private Voter voter;
+    private String token_voter;
     private boolean consentOnNomination;
-    private Map<Voter, Boolean> votedVoters;
-    private List<Offer> programm;
+    private List<Vote> votedVoters;
+    private List<Offer> program;
 
     public MayorCandidate() {
 
     }
 
-    public MayorCandidate(Voter condidate) {
-        this.voter = condidate;
+    public MayorCandidate(String token) {
+        this.token_voter = token;
         this.consentOnNomination = false;
-        this.votedVoters = new HashMap<>();
-    }
-
-    public List<Offer> getProgramm() {
-        return programm;
-    }
-
-    public void addOfferToProgramm(Offer offer) {
-        this.programm.add(offer);
+        this.votedVoters = new ArrayList<>();
+        this.program = new ArrayList<>();
     }
 
     public int getId() {
@@ -39,20 +29,47 @@ public class MayorCandidate {
         this.id = id;
     }
 
+    public String getToken_voter() {
+        return token_voter;
+    }
 
-    public Map<Voter, Boolean> getVotedVoters() {
+    public void setToken_voter(String token_voter) {
+        this.token_voter = token_voter;
+    }
+
+    public boolean isConsentOnNomination() {
+        return consentOnNomination;
+    }
+
+    public void setConsentOnNomination(boolean consentOnNomination) {
+        this.consentOnNomination = consentOnNomination;
+    }
+
+    public List<Vote> getVotedVoters() {
         return votedVoters;
     }
 
-    public void setVotedVoters(HashMap<Voter, Boolean> votedVoters) {
+    public void setVotedVoters(List<Vote> votedVoters) {
         this.votedVoters = votedVoters;
     }
 
-    public void addVotedVoter(Voter voter, Boolean voice) {
-        this.votedVoters.put(voter,voice);
+    public List<Offer> getProgram() {
+        return program;
     }
 
-//    public Integer getCountVoicesPros() {
+    public void setProgram(List<Offer> program) {
+        this.program = program;
+    }
+
+    public void addVote(Vote vote) {
+        this.votedVoters.add(vote);
+    }
+
+    public void addOffer(Offer offer) {
+        this.program.add(offer);
+    }
+
+    //    public Integer getCountVoicesPros() {
 //        int count = 0;
 //        for(Map.Entry<Voter, Boolean> entry : votedVoters.entrySet()) {
 //            if (entry.getValue().equals(true) && entry.getKey().isActive()) {
@@ -72,32 +89,17 @@ public class MayorCandidate {
 //        return count;
 //    }
 
-    public Voter getVoter() {
-        return voter;
-    }
-
-    public void setVoter(Voter voter) {
-        this.voter = voter;
-    }
-
-    public boolean isConsentOnNomination() {
-        return consentOnNomination;
-    }
-
-    public void setConsentOnNomination(boolean consentOnNomination) {
-        this.consentOnNomination = consentOnNomination;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MayorCandidate)) return false;
         MayorCandidate that = (MayorCandidate) o;
-        return Objects.equals(getVoter(), that.getVoter());
+        return Objects.equals(getToken_voter(), that.getToken_voter());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getVoter());
+        return Objects.hash(getToken_voter());
     }
 }

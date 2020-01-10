@@ -28,6 +28,7 @@
         <mapper class="net.thumbtack.school.elections.mybatis.mappers.OfferMapper"/>
         <mapper class="net.thumbtack.school.elections.mybatis.mappers.VoterMapper"/>
         <mapper class="net.thumbtack.school.elections.mybatis.mappers.RatingMapper"/>
+        <mapper class="net.thumbtack.school.elections.mybatis.mappers.VoteMapper"/>
     </mappers>
 
 </configuration>

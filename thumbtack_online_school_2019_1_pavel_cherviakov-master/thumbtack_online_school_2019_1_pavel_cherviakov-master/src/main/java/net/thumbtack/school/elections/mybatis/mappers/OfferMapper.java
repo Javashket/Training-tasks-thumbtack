@@ -1,10 +1,7 @@
 package net.thumbtack.school.elections.mybatis.mappers;
 
-import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Offer;
-import net.thumbtack.school.elections.model.Voter;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
@@ -52,7 +49,8 @@ public interface OfferMapper {
     @Delete("DELETE FROM offer WHERE id = #{offer.id}")
     void delete(Offer offer);
 
-    @Update("UPDATE offer SET author_token = 'fg' WHERE content = #{content} ")
-    void updateSetEmptyAuthor(String content);
+    @Select("UPDATE offer SET author_token = null" +
+            " WHERE id = #{id}")
+    void updateSetEmptyAuthor(int id);
 
 }

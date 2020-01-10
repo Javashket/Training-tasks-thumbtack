@@ -1,9 +1,7 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
-import net.thumbtack.school.elections.model.MayorCandidate;
-import net.thumbtack.school.elections.model.Voter;
-import net.thumbtack.school.elections.mybatis.dao.OfferDao;
 import net.thumbtack.school.elections.model.Offer;
+import net.thumbtack.school.elections.mybatis.dao.OfferDao;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,10 +54,10 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
         }
     }
     @Override
-    public void updateSetEmptyAuthor(String content) {
-        LOGGER.debug("DAO update Offer set empty author by content {}", content);
+    public void updateSetEmptyAuthor(int id) {
+        LOGGER.debug("DAO update Offer set empty author by content {}", id);
         try (SqlSession sqlSession = getSession()){
-            getOfferMapper(sqlSession).updateSetEmptyAuthor(content);
+            getOfferMapper(sqlSession).updateSetEmptyAuthor(id);
         } catch (RuntimeException ex) {
             LOGGER.debug("Can't update Offer set empty author by content", ex);
             throw ex;

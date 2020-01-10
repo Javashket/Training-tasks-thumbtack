@@ -1,10 +1,8 @@
 package net.thumbtack.school.elections.errors.mayorcandidate;
 
-import net.thumbtack.school.elections.errors.voter.TokenVoterErrorCode;
-
 public class AddMayorCandidateErrorCode {
 
-    private String notMayorCandidate = "Кандидат в мэры не найден, он либо не существует, либо его токен не действителен.";
+    private String notMayorCandidate = "Кандидат в мэры не найден, он либо не существует, либо он выполнил логаут.";
 
     private String errorString;
 

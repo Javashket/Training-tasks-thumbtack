@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileService {
 
@@ -33,8 +35,11 @@ public class FileService {
     }
 
     public void readFromFile(String savedDataFileName) throws IOException {
+        // добавить голоса в сохранения
         File file = new File(savedDataFileName);
-        byte[] array = Files.readAllBytes(file.toPath());
+        System.out.println(file.getAbsolutePath());
+        Path path = Paths.get(savedDataFileName);
+        byte[] array = Files.readAllBytes(path);
         AllDataDto allDataDto = new Gson().fromJson(new String(array), AllDataDto.class);
         if(!allDataDto.getVoters().isEmpty()) {
             voterDao.batchInsert(allDataDto.getVoters());

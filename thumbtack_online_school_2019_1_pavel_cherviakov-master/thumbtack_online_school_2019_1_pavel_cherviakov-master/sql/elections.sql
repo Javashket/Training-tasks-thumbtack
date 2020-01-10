@@ -44,8 +44,28 @@ CREATE TABLE rating
 CREATE TABLE mayor_candidate
 (
     id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    voter_id int      NOT NULL,
-#     consentOnNomination  char(50) NOT NULL,
+    token_voter char(50)      NOT NULL,
+    consentOnNomination  BOOLEAN NOT NULL
+)
+    ENGINE = INNODB
+    DEFAULT CHARSET = utf8;
+
+CREATE TABLE mayor_candidate_offer
+(
+    offer_id      int      NOT NULL,
+    mayor_candidate_id      int      NOT NULL,
+    FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE,
+    FOREIGN KEY (mayor_candidate_id) REFERENCES mayor_candidate (id) ON DELETE CASCADE
+)
+    ENGINE = INNODB
+    DEFAULT CHARSET = utf8;
+
+CREATE TABLE vote
+(
+    id       int      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    voter_id int     NOT NULL,
+    vote  BOOLEAN NOT NULL,
+    mayor_candidate_id int NOT NULL ,
     FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE
 )
     ENGINE = INNODB

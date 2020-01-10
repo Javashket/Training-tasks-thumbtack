@@ -56,6 +56,32 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
     }
 
     @Override
+    public void consentOnPosition(String token) {
+        LOGGER.debug("DAO consent on position {}", token );
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).consentOnPosition(token);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't consent on position {}", token, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    @Override
+    public MayorCandidate getByTokenVoter(String token) {
+        LOGGER.debug("DAO get Voter by token {}", token);
+        try (SqlSession sqlSession = getSession()){
+            return getMayorCandidateMapper(sqlSession).getByTokenVoter(token);
+        } catch (RuntimeException ex) {
+            LOGGER.debug("Can't get Voter by token", ex);
+            throw ex;
+        }
+    }
+
+    @Override
     public List<MayorCandidate> getAll() {
         LOGGER.debug("DAO get all MayorCandidates");
         try (SqlSession sqlSession = getSession()){
@@ -67,13 +93,13 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
     }
 
     @Override
-    public void delete(MayorCandidate mayorCandidate) {
-        LOGGER.debug("DAO delete MayorCandidate {}", mayorCandidate);
+    public void delete(String token) {
+        LOGGER.debug("DAO delete MayorCandidate {}", token);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getMayorCandidateMapper(sqlSession).delete(mayorCandidate);
+                getMayorCandidateMapper(sqlSession).delete(token);
             } catch (RuntimeException ex) {
-                LOGGER.debug("Can't delete MayorCandidate {}", mayorCandidate, ex);
+                LOGGER.debug("Can't delete MayorCandidate {}", token, ex);
                 sqlSession.rollback();
                 throw ex;
             }

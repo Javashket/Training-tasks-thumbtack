@@ -3,14 +3,14 @@ package net.thumbtack.school.elections.dto.request;
 public class PutOnMayorDtoRequest {
 
     private String pushing_voter_token;
-    private int hashcode_voter_on_mayor;
+    private RegisterVoterDtoRequest registerVoterDtoRequest;
 
     public PutOnMayorDtoRequest() {
     }
 
-    public PutOnMayorDtoRequest(String pushing_voter_token, int hashcode_voter_on_mayor) {
+    public PutOnMayorDtoRequest(String pushing_voter_token, RegisterVoterDtoRequest registerVoterDtoRequest) {
         this.pushing_voter_token = pushing_voter_token;
-        this.hashcode_voter_on_mayor = hashcode_voter_on_mayor;
+        this.registerVoterDtoRequest = registerVoterDtoRequest;
     }
 
     public String getPushing_voter_token() {
@@ -21,11 +21,11 @@ public class PutOnMayorDtoRequest {
         this.pushing_voter_token = pushing_voter_token;
     }
 
-    public int getHashcode_voter_on_mayor() {
-        return hashcode_voter_on_mayor;
+    public RegisterVoterDtoRequest getRegisterVoterDtoRequest() {
+        return registerVoterDtoRequest;
     }
 
-    public void setHashcode_voter_on_mayor(int hashcode_voter_on_mayor) {
-        this.hashcode_voter_on_mayor = hashcode_voter_on_mayor;
+    public void setRegisterVoterDtoRequest(RegisterVoterDtoRequest registerVoterDtoRequest) {
+        this.registerVoterDtoRequest = registerVoterDtoRequest;
     }
 }

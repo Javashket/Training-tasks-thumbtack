@@ -11,11 +11,15 @@ public interface MayorCandidateDao {
 
     void batchInsert(List<MayorCandidate> mayorCandidates);
 
+    MayorCandidate getByTokenVoter(String token);
+
 //    boolean insert(List<MayorCandidate> mayorCandidate);
 
-    void delete(MayorCandidate mayorCandidate);
+    void delete(String token);
 
     void deleteAll();
+
+    void consentOnPosition(String token);
 
     MayorCandidate getById(int id);
 

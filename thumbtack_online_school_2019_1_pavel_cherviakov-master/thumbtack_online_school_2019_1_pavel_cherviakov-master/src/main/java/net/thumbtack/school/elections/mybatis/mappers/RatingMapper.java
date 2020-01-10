@@ -27,10 +27,10 @@ public interface RatingMapper {
     @Options(useGeneratedKeys = true, keyProperty = "rating.id")
     void batchInsert(List<Rating> ratings);
 
-    @Select("DELETE FROM rating WHERE id = #{id}")
+    @Select("SELECT * FROM rating WHERE id = #{id}")
     Rating getById(int id);
 
-    @Delete("SELECT * FROM rating WHERE id = #{id}")
+    @Delete("DELETE FROM rating WHERE id = #{id}")
     void deleteById(int id);
 
     @Select("SELECT * FROM rating WHERE offer_id = #{id}")

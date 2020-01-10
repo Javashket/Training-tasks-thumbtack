@@ -30,7 +30,6 @@ public class Voter {
         this.apartment = apartment;
         this.login = login;
         this.password = password;
-        this.token = UUID.randomUUID().toString();
     }
 
     public int getId() {
@@ -73,6 +72,10 @@ public class Voter {
         this.token = UUID.randomUUID().toString();
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getHouse() {
         return house;
     }
@@ -105,5 +108,17 @@ public class Voter {
     @Override
     public int hashCode() {
         return Objects.hash(getFirstName(), getLastName(), getPatronymic(), getStreet(), getHouse(), getApartment());
+    }
+
+    @Override
+    public String toString() {
+        return "Voter{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment + '\'' +
+                '}';
     }
 }

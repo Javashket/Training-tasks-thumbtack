@@ -1,6 +1,5 @@
 package net.thumbtack.school.elections.mybatis.mappers;
 
-import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Voter;
 import org.apache.ibatis.annotations.*;
 
@@ -37,7 +36,7 @@ public interface VoterMapper {
     @Select("SELECT * FROM voter WHERE token = #{token}")
     Voter getByToken(String token);
 
-    @Update("UPDATE voter SET token = ''" +
+    @Update("UPDATE voter SET token = null" +
             " WHERE token = #{token} ")
     void logoutByToken(String token);
 
