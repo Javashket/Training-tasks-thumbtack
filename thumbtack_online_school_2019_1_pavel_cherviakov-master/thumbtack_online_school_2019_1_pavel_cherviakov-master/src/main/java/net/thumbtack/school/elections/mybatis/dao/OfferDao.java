@@ -10,6 +10,8 @@ public interface OfferDao {
 
     void batchInsert(List<Offer> offers);
 
+    void update(Offer offer);
+
     void delete(Offer offer);
 
     void deleteAll();

@@ -5,10 +5,12 @@ import java.util.List;
 
 public class GetOffersSeveralCandidatesDtoRequest {
 
+    private String token;
     private List<String> candidates_token;
 
-    public GetOffersSeveralCandidatesDtoRequest() {
+    public GetOffersSeveralCandidatesDtoRequest(String token) {
         this.candidates_token = new ArrayList<>();
+        this.token = token;
     }
 
     public List<String> getCandidates_token() {
@@ -17,6 +19,14 @@ public class GetOffersSeveralCandidatesDtoRequest {
 
     public void addCandidateToken(String token) {
         this.candidates_token.add(token);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setCandidates_token(List<String> candidates_token) {

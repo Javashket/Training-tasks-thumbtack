@@ -10,6 +10,7 @@ import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
 import net.thumbtack.school.elections.errors.mayorcandidate.AddMayorCandidateErrorCode;
 import net.thumbtack.school.elections.errors.voter.TokenVoterErrorCode;
 import net.thumbtack.school.elections.model.MayorCandidate;
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.server.Server;
 import org.junit.jupiter.api.Test;
 
@@ -20,27 +21,34 @@ public class TestPutOnMayorCandidate extends Init {
 
     @Test
     public void testPutOnMayorCandidateYourself(){
-        RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
+        RegisterVoterDtoRequest requestRegister1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
                 "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
-        String jsonRequest1 = new Gson().toJson(request1);
-        String jsonResponse1 = Server.registerVoter(jsonRequest1);
-        RegisterVoterDtoResponse result1 = new Gson().fromJson(jsonResponse1, RegisterVoterDtoResponse.class);
-        PutOnMayorDtoRequest request2 = new PutOnMayorDtoRequest(result1.getToken(), request1);
-        String jsonRequest2 = new Gson().toJson(request2);
-        Server.putOnMayor(jsonRequest2);
-        TokenVoterDtoRequest tokenVoterDtoRequest3 = new TokenVoterDtoRequest(result1.getToken());
+        String jsonRequestRegister1 = new Gson().toJson(requestRegister1);
+        String jsonResponseRegister1 = Server.registerVoter(jsonRequestRegister1);
+        RegisterVoterDtoResponse resultRegister1 = new Gson().fromJson(jsonResponseRegister1, RegisterVoterDtoResponse.class);
+
+        String content = "fghfgh";
+        Offer requestAddOffer = new Offer(resultRegister1.getToken(), content);
+        String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer);
+
+        PutOnMayorDtoRequest requestPutMayor = new PutOnMayorDtoRequest(resultRegister1.getToken(), requestRegister1);
+        String jsonRequestPutMayor = new Gson().toJson(requestPutMayor);
+        Server.putOnMayor(jsonRequestPutMayor);
+
+        TokenVoterDtoRequest tokenVoterDtoRequest3 = new TokenVoterDtoRequest(resultRegister1.getToken());
         String jsonRequest3 = new Gson().toJson(tokenVoterDtoRequest3);
         String jsonResponse2 = Server.getAllCandidates(jsonRequest3);
         AllCandidatesDtoResponse allCandidatesDtoResponse = new Gson().fromJson(jsonResponse2, AllCandidatesDtoResponse.class);
         boolean actual = false;
         for(MayorCandidate mayorCandidate : allCandidatesDtoResponse.getMayorCandidates()) {
-            if (mayorCandidate.getToken_voter().equals(result1.getToken()) && mayorCandidate.isConsentOnNomination()) {
-                // проверка вставки прдложений
+            if (mayorCandidate.getToken_voter().equals(resultRegister1.getToken()) && mayorCandidate.isConsentOnNomination()) {
                 actual = true;
                 break;
             }
         }
         assertTrue(actual);
+        assertEquals(requestAddOffer, allCandidatesDtoResponse.getMayorCandidates().get(0).getProgram().get(0));
     }
 
     @Test

@@ -138,7 +138,6 @@ public class Server {
         return offerService.rateOffer(jsonRequest);
     }
 
-    // автор не может
     public static String deleteRatingFromOffer(String requestJson) {
         return offerService.deleteRatingFromOffer(requestJson);
     }
@@ -148,7 +147,7 @@ public class Server {
     }
 
     public static String withdrawCandidateWithMayor(String jsonRequest) {
-        return mayorCandidateService.withdrawСandidacyWithMayor(jsonRequest);
+        return mayorCandidateService.withdrawCandidateWithMayor(jsonRequest);
     }
 
     public static String consentOnPositionOnMayor(String jsonRequest) {
@@ -167,31 +166,26 @@ public class Server {
         return mayorCandidateService.includeOfferInYourProgram(jsonRequest);
     }
 
-    // не могут удалить свои предложения
     public static String deleteOfferFromYourProgram(String jsonRequest) {
         return mayorCandidateService.deleteOfferFromYourProgram(jsonRequest);
     }
 
-    // String jsonRequest содержит токен подтверждающий регистрацию
     public static String getAllVoters(String jsonRequest) {
         return voterService.getAllVoters(jsonRequest);
     }
 
-    // String jsonRequest содержит токен подтверждающий регистрацию
     public static String getAllCandidates(String jsonRequest) {
         return mayorCandidateService.getAllCandidates(jsonRequest);
     }
 
-    // String jsonRequest содержит токен подтверждающий регистрацию
     public static String  getAllOffers(String jsonRequest) {
         return offerService.getAllOffers(jsonRequest);
     }
 
     public static String  getOffersSeveralCandidates(String jsonRequest) {
-        return offerService.getAllOffers(jsonRequest);
+        return offerService.getOffersSeveralCandidates(jsonRequest);
     }
 
-    // передача токена передача файла места записи и возврат результата
     public static String summarize(String jsonRequest) throws IOException {
         return electionService.summarize(jsonRequest);
     }

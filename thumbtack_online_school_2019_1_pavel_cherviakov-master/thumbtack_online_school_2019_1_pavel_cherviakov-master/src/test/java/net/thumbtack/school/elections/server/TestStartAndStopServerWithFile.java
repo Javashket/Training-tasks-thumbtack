@@ -64,7 +64,7 @@ public class TestStartAndStopServerWithFile {
         AllOffersDtoResponse allOffersDtoResponse = new Gson().fromJson(jsonResponseAllOffers, AllOffersDtoResponse.class);
         Rating rating = new Rating(resultRegister2.getToken(), 4);
         requestAddOffer1.addRate(rating);
-        assertEquals(requestAddOffer1.getRatings(), allOffersDtoResponse.getOffers());
+        assertEquals(requestAddOffer1.getRatings(), allOffersDtoResponse.getOffers().get(0).getRatings());
 
         Server.stopServer(null);
     }

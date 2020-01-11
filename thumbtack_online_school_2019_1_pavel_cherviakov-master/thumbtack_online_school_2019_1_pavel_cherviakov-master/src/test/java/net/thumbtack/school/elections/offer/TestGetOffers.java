@@ -79,14 +79,18 @@ public class TestGetOffers extends Init {
         List<Offer> expected = new ArrayList<>();
         List<Offer> actual = allOffersDtoResponse.getOffers();
 
+        expected.add(requestAddOffer1);
+        expected.add(requestAddOffer2);
+        expected.add(requestAddOffer3);
+        expected.add(requestAddOffer4);
+
         requestAddOffer1.addRate(new Rating(resultRegister2.getToken(), 5));
         requestAddOffer2.addRate(new Rating(resultRegister2.getToken(), 2));
         requestAddOffer3.addRate(new Rating(resultRegister2.getToken(), 3));
         requestAddOffer4.addRate(new Rating(resultRegister2.getToken(), 1));
 
-        assertEquals(expected, actual);
-
         Collections.sort(expected);
+        assertEquals(expected, actual);
         assertEquals(expected.get(0), actual.get(0));
         assertEquals(expected.get(3), actual.get(3));
     }
@@ -139,8 +143,8 @@ public class TestGetOffers extends Init {
         String content3 = "Вымостить тротуарной плиткой центральную площадь3.";
 
         Offer requestAddOffer1 = new Offer(resultRegister1.getToken(), content1);
-        Offer requestAddOffer2 = new Offer(resultRegister1.getToken(), content2);
-        Offer requestAddOffer3 = new Offer(resultRegister1.getToken(), content3);
+        Offer requestAddOffer2 = new Offer(resultRegister2.getToken(), content2);
+        Offer requestAddOffer3 = new Offer(resultRegister3.getToken(), content3);
 
         String jsonRequestAddOffer1 = new Gson().toJson(requestAddOffer1);
         String jsonRequestAddOffer2 = new Gson().toJson(requestAddOffer2);
@@ -150,7 +154,7 @@ public class TestGetOffers extends Init {
         Server.addOffer(jsonRequestAddOffer2);
         Server.addOffer(jsonRequestAddOffer3);
 
-        GetOffersSeveralCandidatesDtoRequest getOffersSeveralCandidatesRequest = new GetOffersSeveralCandidatesDtoRequest();
+        GetOffersSeveralCandidatesDtoRequest getOffersSeveralCandidatesRequest = new GetOffersSeveralCandidatesDtoRequest(resultRegister1.getToken());
         getOffersSeveralCandidatesRequest.addCandidateToken(resultRegister1.getToken());
         getOffersSeveralCandidatesRequest.addCandidateToken(resultRegister2.getToken());
         String jsonGetOffersSeveralCandidatesRequest = new Gson().toJson(getOffersSeveralCandidatesRequest);
@@ -200,20 +204,20 @@ public class TestGetOffers extends Init {
         Server.addOffer(jsonRequestAddOffer2);
         Server.addOffer(jsonRequestAddOffer3);
 
-        GetOffersSeveralCandidatesDtoRequest getOffersSeveralCandidatesRequest = new GetOffersSeveralCandidatesDtoRequest();
+        TokenVoterDtoRequest tokenVoterDtoRequest = new TokenVoterDtoRequest(resultRegister1.getToken());
+        String jsonTokenVoterDtoRequest = new Gson().toJson(tokenVoterDtoRequest);
+        Server.logout(jsonTokenVoterDtoRequest);
+
+        GetOffersSeveralCandidatesDtoRequest getOffersSeveralCandidatesRequest = new GetOffersSeveralCandidatesDtoRequest(resultRegister1.getToken());
         getOffersSeveralCandidatesRequest.addCandidateToken(resultRegister1.getToken());
         getOffersSeveralCandidatesRequest.addCandidateToken(resultRegister2.getToken());
         String jsonGetOffersSeveralCandidatesRequest = new Gson().toJson(getOffersSeveralCandidatesRequest);
         String jsonResponseOffersSeveralCandidates = Server.getOffersSeveralCandidates(jsonGetOffersSeveralCandidatesRequest);
-        AllOffersDtoResponse OffersSeveralCandidatesResponse = new Gson().fromJson(jsonResponseOffersSeveralCandidates, AllOffersDtoResponse.class);
-        List<Offer> expected = new ArrayList<>();
-        expected.add(requestAddOffer1);
-        expected.add(requestAddOffer2);
-        List<Offer> actual = OffersSeveralCandidatesResponse.getOffers();
+        TokenVoterErrorCode expected = new Gson().fromJson(jsonResponseOffersSeveralCandidates, TokenVoterErrorCode.class);
+        TokenVoterErrorCode actual = new TokenVoterErrorCode();
+        actual.setErrorString(actual.getNotFoundToken());
 
-        assertEquals(expected, actual);
-        // подумать что отправлять в качестве ззапроса индентефикации
-        fail();
+        assertEquals(expected.getErrorString(), actual.getErrorString());
     }
 
 }

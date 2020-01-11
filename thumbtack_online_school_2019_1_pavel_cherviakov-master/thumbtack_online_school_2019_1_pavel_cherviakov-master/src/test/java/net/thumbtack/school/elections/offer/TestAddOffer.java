@@ -41,17 +41,18 @@ public class TestAddOffer extends Init {
 
     @Test
     public void testAddSameOfferFromSameVoter(){
-        RegisterVoterDtoRequest request1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
+        RegisterVoterDtoRequest requestRegister = new RegisterVoterDtoRequest("Иван1","Иванов1",
                 "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
-        String jsonRequest1 = new Gson().toJson(request1);
-        String jsonResponse1 = Server.registerVoter(jsonRequest1);
-        RegisterVoterDtoResponse result1 = new Gson().fromJson(jsonResponse1, RegisterVoterDtoResponse.class);
+        String jsonRequestRegister = new Gson().toJson(requestRegister);
+        String jsonResponseRegister = Server.registerVoter(jsonRequestRegister);
+        RegisterVoterDtoResponse resultRegister = new Gson().fromJson(jsonResponseRegister, RegisterVoterDtoResponse.class);
+
         String content = "Вымостить тротуарной плиткой центральную площадь.";
-        Offer request2 = new Offer(result1.getToken(), content);
-        String jsonRequest2 = new Gson().toJson(request2);
-        Server.addOffer(jsonRequest2);
-        String jsonResponse2 = Server.addOffer(jsonRequest2);
-        AddOfferErrorCode actual = new Gson().fromJson(jsonResponse2, AddOfferErrorCode.class);
+        Offer requestAddOffer = new Offer(resultRegister.getToken(), content);
+        String jsonRequestAddOffer1 = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer1);
+        String jsonResponseAddOffer2 = Server.addOffer(jsonRequestAddOffer1);
+        AddOfferErrorCode actual = new Gson().fromJson(jsonResponseAddOffer2, AddOfferErrorCode.class);
         AddOfferErrorCode expected = new AddOfferErrorCode();
         expected.setErrorString(expected.getSameOffer());
         assertEquals(expected.getErrorString(), actual.getErrorString());
@@ -61,22 +62,26 @@ public class TestAddOffer extends Init {
     public void testAddSameOfferFromAnotherVoter(){
         RegisterVoterDtoRequest requestRegister1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
                 "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
-        RegisterVoterDtoRequest requestRegister2 = new RegisterVoterDtoRequest("Иван1","Иванов1",
-                "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
-        String jsonRequest1 = new Gson().toJson(requestRegister1);
-        String jsonResponse1 = Server.registerVoter(jsonRequest1);
-        RegisterVoterDtoResponse result1 = new Gson().fromJson(jsonResponse1, RegisterVoterDtoResponse.class);
-        String jsonRequest2 = new Gson().toJson(requestRegister2);
-        String jsonResponse2 = Server.registerVoter(jsonRequest2);
-        RegisterVoterDtoResponse result2 = new Gson().fromJson(jsonResponse2, RegisterVoterDtoResponse.class);
+        String jsonRequestRegister1 = new Gson().toJson(requestRegister1);
+        String jsonResponseRegister1 = Server.registerVoter(jsonRequestRegister1);
+        RegisterVoterDtoResponse resultRegister1 = new Gson().fromJson(jsonResponseRegister1, RegisterVoterDtoResponse.class);
+
+        RegisterVoterDtoRequest requestRegister2 = new RegisterVoterDtoRequest("Иван2","Иванов2",
+                "Иванович2","улица2","дом2", "562","logpass2","passlogpass2");
+        String jsonRequestRegister2 = new Gson().toJson(requestRegister2);
+        String jsonResponseRegister2 = Server.registerVoter(jsonRequestRegister2);
+        RegisterVoterDtoResponse resultRegister2 = new Gson().fromJson(jsonResponseRegister2, RegisterVoterDtoResponse.class);
+
         String content = "Вымостить тротуарной плиткой центральную площадь.";
-        Offer request3 = new Offer(result1.getToken(), content);
-        Offer request4 = new Offer(result2.getToken(), content);
-        String jsonRequest3 = new Gson().toJson(request3);
-        Server.addOffer(jsonRequest3);
-        String jsonRequest4 = new Gson().toJson(request4);
-        String jsonResponse3 = Server.addOffer(jsonRequest4);
-        AddOfferErrorCode actual = new Gson().fromJson(jsonResponse3, AddOfferErrorCode.class);
+        Offer requestAddOffer1 = new Offer(resultRegister1.getToken(), content);
+        String jsonRequestAddOffer1 = new Gson().toJson(requestAddOffer1);
+        Server.addOffer(jsonRequestAddOffer1);
+
+        Offer requestAddOffer2 = new Offer(resultRegister2.getToken(), content);
+        String jsonRequestAddOffer2 = new Gson().toJson(requestAddOffer2);
+        String jsonResponseAddOffer2 = Server.addOffer(jsonRequestAddOffer2);
+
+        AddOfferErrorCode actual = new Gson().fromJson(jsonResponseAddOffer2, AddOfferErrorCode.class);
         AddOfferErrorCode expected = new AddOfferErrorCode();
         expected.setErrorString(expected.getSameOffer());
         assertEquals(expected.getErrorString(), actual.getErrorString());

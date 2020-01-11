@@ -29,6 +29,21 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
     }
 
     @Override
+    public void update(Offer offer) {
+        LOGGER.debug("DAO update Offer  {}", offer);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getOfferMapper(sqlSession).update(offer);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't update Offer {}", offer, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    @Override
     public void batchInsert(List<Offer> offers) {
         LOGGER.debug("DAO insert Offers {}", offers);
         try (SqlSession sqlSession = getSession()) {
@@ -115,5 +130,4 @@ public class OfferDaoImpl extends DaoImplBase implements OfferDao {
             sqlSession.commit();
         }
     }
-
 }

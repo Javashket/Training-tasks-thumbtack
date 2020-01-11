@@ -112,13 +112,11 @@ public class Voter {
 
     @Override
     public String toString() {
-        return "Voter{" +
-                "firstName='" + firstName + '\'' +
+        return                  "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", street='" + street + '\'' +
                 ", house='" + house + '\'' +
-                ", apartment='" + apartment + '\'' +
-                '}';
+                ", apartment='" + apartment ;
     }
 }

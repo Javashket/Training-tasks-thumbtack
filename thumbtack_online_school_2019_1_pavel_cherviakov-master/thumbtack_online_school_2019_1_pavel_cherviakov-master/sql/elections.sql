@@ -66,7 +66,8 @@ CREATE TABLE vote
     voter_id int     NOT NULL,
     vote  BOOLEAN NOT NULL,
     mayor_candidate_id int NOT NULL ,
-    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE
+    FOREIGN KEY (voter_id) REFERENCES voter (id) ON DELETE CASCADE,
+    FOREIGN KEY (mayor_candidate_id) REFERENCES mayor_candidate (id) ON DELETE CASCADE
 )
     ENGINE = INNODB
     DEFAULT CHARSET = utf8;

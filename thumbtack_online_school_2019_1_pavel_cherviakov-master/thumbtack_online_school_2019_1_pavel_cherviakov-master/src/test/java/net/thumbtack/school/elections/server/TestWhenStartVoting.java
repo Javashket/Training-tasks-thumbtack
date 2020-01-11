@@ -222,12 +222,81 @@ public class TestWhenStartVoting extends Init {
 
     @Test
     public void testIncludeOfferInYourProgram() {
+        RegisterVoterDtoRequest requestRegister1 = new RegisterVoterDtoRequest("Иван1", "Иванов1",
+                "Иванович1", "улица1", "дом1", "561", "logpass1", "passlogpass1");
+        String jsonRequestRegister1 = new Gson().toJson(requestRegister1);
+        String jsonResponseRegister1 = Server.registerVoter(jsonRequestRegister1);
+        RegisterVoterDtoResponse resultRegister1 = new Gson().fromJson(jsonResponseRegister1, RegisterVoterDtoResponse.class);
 
+        RegisterVoterDtoRequest requestRegister2 = new RegisterVoterDtoRequest("Иван2", "Иванов2",
+                "Иванович2", "улица2", "дом2", "562", "logpass2", "passlogpass2");
+        String jsonRequestRegister2 = new Gson().toJson(requestRegister2);
+        String jsonResponseRegister2 = Server.registerVoter(jsonRequestRegister2);
+        RegisterVoterDtoResponse resultRegister2 = new Gson().fromJson(jsonResponseRegister2, RegisterVoterDtoResponse.class);
+
+        PutOnMayorDtoRequest putOnMayorRequest1 = new PutOnMayorDtoRequest(resultRegister1.getToken(), requestRegister2);
+        String jsonPutOnMayorRequest1 = new Gson().toJson(putOnMayorRequest1);
+        Server.putOnMayor(jsonPutOnMayorRequest1);
+
+        TokenVoterDtoRequest tokenVoterRequest2 = new TokenVoterDtoRequest(resultRegister2.getToken());
+        String jsonTokenVoterRequest2 = new Gson().toJson(tokenVoterRequest2);
+        Server.consentOnPositionOnMayor(jsonTokenVoterRequest2);
+        String content = "Вымостить тротуарной плиткой центральную площадь.";
+        Offer requestAddOffer = new Offer(resultRegister1.getToken(), content);
+        String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer);
         Server.startVoting();
+        IncludeOfferDtoRequest includeOfferRequest = new IncludeOfferDtoRequest(content);
+        String jsonIncludeOfferRequest = new Gson().toJson(includeOfferRequest);
+        String jsonIncludeOfferResponse = Server.includeOfferInYourProgram(jsonIncludeOfferRequest);
+
+        VotingOperationsErrorCode actual = new Gson().fromJson(jsonIncludeOfferResponse, VotingOperationsErrorCode.class);
+        VotingOperationsErrorCode expected = new VotingOperationsErrorCode();
+        expected.setErrorString(expected.getStartVoting());
+
+        assertEquals(expected.getErrorString(), actual.getErrorString());
+
     }
 
     @Test
     public void testDeleteOfferFromYourProgram() {
+        RegisterVoterDtoRequest requestRegister1 = new RegisterVoterDtoRequest("Иван1", "Иванов1",
+                "Иванович1", "улица1", "дом1", "561", "logpass1", "passlogpass1");
+        String jsonRequestRegister1 = new Gson().toJson(requestRegister1);
+        String jsonResponseRegister1 = Server.registerVoter(jsonRequestRegister1);
+        RegisterVoterDtoResponse resultRegister1 = new Gson().fromJson(jsonResponseRegister1, RegisterVoterDtoResponse.class);
+
+        RegisterVoterDtoRequest requestRegister2 = new RegisterVoterDtoRequest("Иван2", "Иванов2",
+                "Иванович2", "улица2", "дом2", "562", "logpass2", "passlogpass2");
+        String jsonRequestRegister2 = new Gson().toJson(requestRegister2);
+        String jsonResponseRegister2 = Server.registerVoter(jsonRequestRegister2);
+        RegisterVoterDtoResponse resultRegister2 = new Gson().fromJson(jsonResponseRegister2, RegisterVoterDtoResponse.class);
+
+        PutOnMayorDtoRequest putOnMayorRequest1 = new PutOnMayorDtoRequest(resultRegister1.getToken(), requestRegister2);
+        String jsonPutOnMayorRequest1 = new Gson().toJson(putOnMayorRequest1);
+        Server.putOnMayor(jsonPutOnMayorRequest1);
+
+        TokenVoterDtoRequest tokenVoterRequest2 = new TokenVoterDtoRequest(resultRegister2.getToken());
+        String jsonTokenVoterRequest2 = new Gson().toJson(tokenVoterRequest2);
+        Server.consentOnPositionOnMayor(jsonTokenVoterRequest2);
+        String content = "Вымостить тротуарной плиткой центральную площадь.";
+        Offer requestAddOffer = new Offer(resultRegister1.getToken(), content);
+        String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer);
+
+        IncludeOfferDtoRequest includeOfferRequest = new IncludeOfferDtoRequest(content);
+        String jsonIncludeOfferRequest = new Gson().toJson(includeOfferRequest);
+        Server.includeOfferInYourProgram(jsonIncludeOfferRequest);
         Server.startVoting();
+
+        DeleteOfferInYourProgramDtoRequest deleteOfferInYourProgramRequest = new DeleteOfferInYourProgramDtoRequest(resultRegister1.getToken(),content);
+        String jsonDeleteOfferInYourProgramRequest = new Gson().toJson(deleteOfferInYourProgramRequest);
+        String jsonDeleteOfferResponse = Server.deleteOfferFromYourProgram(jsonDeleteOfferInYourProgramRequest);
+
+        VotingOperationsErrorCode actual = new Gson().fromJson(jsonDeleteOfferResponse, VotingOperationsErrorCode.class);
+        VotingOperationsErrorCode expected = new VotingOperationsErrorCode();
+        expected.setErrorString(expected.getStartVoting());
+
+        assertEquals(expected.getErrorString(), actual.getErrorString());
     }
 }

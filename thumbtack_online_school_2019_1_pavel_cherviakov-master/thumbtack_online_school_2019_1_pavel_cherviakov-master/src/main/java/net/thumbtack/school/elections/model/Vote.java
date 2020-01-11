@@ -13,6 +13,10 @@ public class Vote {
         this.vote = vote;
     }
 
+    public Vote(Integer a, Integer b, Boolean c, Integer d) {
+
+    }
+
     public int getId() {
         return id;
     }

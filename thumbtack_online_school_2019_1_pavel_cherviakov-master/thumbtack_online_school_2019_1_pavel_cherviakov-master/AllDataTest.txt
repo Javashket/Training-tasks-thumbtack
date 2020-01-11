@@ -1,1 +1,1 @@
-{"mayorCandidates":[],"offers":[],"voters":[{"id":49,"firstName":"Иван1","lastName":"Иванов1","patronymic":"Иванович1","street":"улица1","house":"дом1","apartment":"561","login":"logpass1","password":"passlogpass1","token":"a53c2ff2-d1cf-4c19-b0a8-6278134a25a5"}]}
+{"mayorCandidates":[],"offers":[],"voters":[{"id":573,"firstName":"Иван1","lastName":"Иванов1","patronymic":"Иванович1","street":"улица1","house":"дом1","apartment":"561","login":"logpass1","password":"passlogpass1","token":"6f179b20-7a2d-4c17-8297-e155bf0c3bdf"}],"votes":[]}

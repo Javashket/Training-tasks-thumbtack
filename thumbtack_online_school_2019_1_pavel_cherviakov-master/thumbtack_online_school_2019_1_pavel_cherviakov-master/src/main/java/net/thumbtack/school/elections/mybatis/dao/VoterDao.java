@@ -1,6 +1,5 @@
 package net.thumbtack.school.elections.mybatis.dao;
 
-import net.thumbtack.school.database.model.Trainee;
 import net.thumbtack.school.elections.model.Voter;
 
 import java.util.List;

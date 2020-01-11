@@ -18,7 +18,7 @@ public class Offer implements Comparable<Offer>{
         this.content = content;
         this.average_rating = 0;
         this.ratings = new ArrayList<>();
-        this.ratings.add(new Rating(author_token, 5));
+        addRate(new Rating(author_token, 5));
     }
 
     public void setAuthor() {

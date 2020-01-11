@@ -11,9 +11,11 @@ public interface VoteMapper {
     @Delete("DELETE FROM vote")
     void deleteAll();
 
-    @Insert("INSERT INTO vote (token_voter, consentOnNomination) VALUES (#{token_voter}, #{consentOnNomination})")
+    @Insert("INSERT INTO vote (voter_id, vote, mayor_candidate_id)" +
+            " VALUES (#{vote.voter.id}, #{vote.vote}," +
+            " #{mayorCandidate.id})")
     @Options(useGeneratedKeys = true)
-    Integer insert(Vote vote);
+    Integer insert(@Param("vote")Vote vote, @Param("mayorCandidate")MayorCandidate mayorCandidate);
 
     @Insert({"<script>",
             "INSERT INTO vote (token_voter, consentOnNomination) VALUES",
@@ -28,11 +30,11 @@ public interface VoteMapper {
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "votedVoters", column = "id", javaType = List.class,
-                    many = @Many(select = "net.thumbtack.school.database.mybatis.mappers.VoteMapper.getByMayorCandidateId"))})
+                    many = @Many(select = "net.thumbtack.school.elections.mybatis.mappers.VoteMapper.getByMayorCandidateId"))})
     Vote getById(int id);
 
-    @Select("SELECT * FROM vote WHERE id = #{id}")
-    Vote getByMayorCandidateId(int id);
+    @Select("SELECT * FROM vote WHERE mayor_candidate_id = #{id}")
+    List<Vote> getByMayorCandidateId(int id);
 
     @Select("SELECT * FROM  vote")
     List<Vote> getAll();

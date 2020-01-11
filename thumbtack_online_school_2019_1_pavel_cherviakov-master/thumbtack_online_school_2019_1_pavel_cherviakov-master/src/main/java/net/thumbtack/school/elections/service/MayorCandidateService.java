@@ -1,22 +1,25 @@
 package net.thumbtack.school.elections.service;
 
 import com.google.gson.Gson;
+import net.thumbtack.school.elections.dto.request.IncludeOfferDtoRequest;
 import net.thumbtack.school.elections.dto.request.PutOnMayorDtoRequest;
 import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
 import net.thumbtack.school.elections.dto.response.AllCandidatesDtoResponse;
 import net.thumbtack.school.elections.errors.election.VotingOperationsErrorCode;
 import net.thumbtack.school.elections.errors.mayorcandidate.AddMayorCandidateErrorCode;
+import net.thumbtack.school.elections.errors.mayorcandidate.AlreadyConsentOnMayor;
+import net.thumbtack.school.elections.errors.mayorcandidate.NotConsentOnMayorErrorCode;
 import net.thumbtack.school.elections.errors.mayorcandidate.TokenMayorErrorCode;
-import net.thumbtack.school.elections.errors.voter.LogoutVoterErrorCode;
+import net.thumbtack.school.elections.errors.offer.IncludeOfferErrorCode;
+import net.thumbtack.school.elections.errors.voter.TokenVoterErrorCode;
 import net.thumbtack.school.elections.model.MayorCandidate;
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Voter;
 import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
 import net.thumbtack.school.elections.mybatis.dao.OfferDao;
-import net.thumbtack.school.elections.mybatis.dao.RatingDao;
 import net.thumbtack.school.elections.mybatis.dao.VoterDao;
 import net.thumbtack.school.elections.mybatis.daoimpl.MayorCandidateDaoImpl;
 import net.thumbtack.school.elections.mybatis.daoimpl.OfferDaoImpl;
-import net.thumbtack.school.elections.mybatis.daoimpl.RatingDaoImpl;
 import net.thumbtack.school.elections.mybatis.daoimpl.VoterDaoImpl;
 import net.thumbtack.school.elections.server.Server;
 
@@ -24,14 +27,12 @@ public class MayorCandidateService {
 
     private VoterDao voterDao;
     private OfferDao offerDao;
-    private RatingDao ratingDao;
     private MayorCandidateDao mayorCandidateDao;
     private String votingOperationsErrorCodeResponse;
 
     public MayorCandidateService() {
         this.voterDao = new VoterDaoImpl();
         this.offerDao = new OfferDaoImpl();
-        this.ratingDao = new RatingDaoImpl();
         this.mayorCandidateDao = new MayorCandidateDaoImpl();
         VotingOperationsErrorCode votingOperationsErrorCode = new VotingOperationsErrorCode();
         votingOperationsErrorCode.setErrorString(votingOperationsErrorCode.getStartVoting());
@@ -49,7 +50,7 @@ public class MayorCandidateService {
         PutOnMayorDtoRequest putOnMayorDtoRequest = new Gson().fromJson(jsonRequest, PutOnMayorDtoRequest.class);
         Voter voter = voterDao.getByToken(putOnMayorDtoRequest.getPushing_voter_token());
         if(voter == null) {
-            TokenMayorErrorCode tokenMayorErrorCode = new TokenMayorErrorCode();
+            TokenVoterErrorCode tokenMayorErrorCode = new TokenVoterErrorCode();
             tokenMayorErrorCode.setErrorString(tokenMayorErrorCode.getNotFoundToken());
             return new Gson().toJson(tokenMayorErrorCode);
         }
@@ -65,9 +66,13 @@ public class MayorCandidateService {
             MayorCandidate mayorCandidate = new MayorCandidate(voter.getToken());
             if(voter.getToken().equals(putOnMayorDtoRequest.getPushing_voter_token())) {
                 mayorCandidate.setConsentOnNomination(true);
-                // добавить включение программ
             }
             mayorCandidateDao.insert(mayorCandidate);
+            for(Offer offer : offerDao.getAll()) {
+                if(offer.getAuthor_token().equals(mayorCandidate.getToken_voter())) {
+                    mayorCandidateDao.includeOffer(mayorCandidate.getId(), offer);
+                }
+            }
             return "";
         }
         AddMayorCandidateErrorCode addMayorCandidateErrorCode = new AddMayorCandidateErrorCode();
@@ -77,7 +82,6 @@ public class MayorCandidateService {
 
 
     public String consentOnPositionOnMayor(String jsonRequest) {
-        // добавить проверку  токена,  проверку токена среди кандидатов в мэры
         if (Server.isStartingVoting()) {
             return this.votingOperationsErrorCodeResponse;
         }
@@ -91,12 +95,21 @@ public class MayorCandidateService {
             return new Gson().toJson( expected.setErrorString(expected.getNotFoundToken()));
         }
         if(mayorCandidateDao.getByTokenVoter(tokenVoterDto.getToken()) == null) {
-            TokenMayorErrorCode tokenMayorErrorCode = new TokenMayorErrorCode();
-            tokenMayorErrorCode.setErrorString(tokenMayorErrorCode.getNotFoundToken());
-            return new Gson().toJson( expected.setErrorString(expected.getNotFoundToken()));
+            return new Gson().toJson(expected.setErrorString(expected.getNotFoundToken()));
+        }
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(tokenVoterDto.getToken()) && mayorCandidate.isConsentOnNomination()) {
+                AlreadyConsentOnMayor alreadyConsentOnMayor = new AlreadyConsentOnMayor();
+                alreadyConsentOnMayor.setErrorString(alreadyConsentOnMayor.getAlreadyConfirm());
+                return new Gson().toJson(alreadyConsentOnMayor);
+            }
         }
         mayorCandidateDao.consentOnPosition(tokenVoterDto.getToken());
-        // включение предложений
+        for(Offer offer : offerDao.getAll()) {
+            if(offer.getAuthor_token().equals(tokenVoterDto.getToken())) {
+                mayorCandidateDao.includeOffer( mayorCandidateDao.getByTokenVoter(tokenVoterDto.getToken()).getId(), offer);
+            }
+        }
         return "";
     }
 
@@ -106,9 +119,9 @@ public class MayorCandidateService {
             return response;
         }
         TokenVoterDtoRequest tokenVoterDto = new Gson().fromJson(jsonRequest, TokenVoterDtoRequest.class);
-        LogoutVoterErrorCode logoutVoterErrorCode = new LogoutVoterErrorCode();
+        TokenVoterErrorCode tokenVoterErrorCode = new TokenVoterErrorCode();
         if(voterDao.getByToken(tokenVoterDto.getToken()) == null) {
-            return new Gson().toJson(logoutVoterErrorCode.setErrorString(logoutVoterErrorCode.getNotFoundToken()));
+            return new Gson().toJson(tokenVoterErrorCode.setErrorString(tokenVoterErrorCode.getNotFoundToken()));
         }
         AllCandidatesDtoResponse allCandidatesDtoResponse = new AllCandidatesDtoResponse();
         allCandidatesDtoResponse.setMayorCandidates(mayorCandidateDao.getAll());
@@ -116,25 +129,92 @@ public class MayorCandidateService {
     }
 
     public String includeOfferInYourProgram(String jsonRequest) {
+        if (Server.isStartingVoting()) {
+            return this.votingOperationsErrorCodeResponse;
+        }
         String response = JsonService.checkIsValidJson(jsonRequest);
         if(!response.equals("")) {
             return response;
         }
-        // сначала должен дать свое согласие на мэры
-        return null;
+        IncludeOfferDtoRequest includeOfferDtoRequest = new Gson().fromJson(jsonRequest, IncludeOfferDtoRequest.class);
+        MayorCandidate mayorCandidate1 = null;
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(includeOfferDtoRequest.getToken()) &&
+            mayorCandidate.isConsentOnNomination()) {
+                mayorCandidate1 = mayorCandidate;
+            }
+        }
+        if(mayorCandidate1 == null) {
+            NotConsentOnMayorErrorCode notConsentOnMayorErrorCode = new NotConsentOnMayorErrorCode();
+            notConsentOnMayorErrorCode.setErrorString(notConsentOnMayorErrorCode.getNotConsent());
+            return new Gson().toJson(notConsentOnMayorErrorCode);
+        }
+        for(Offer offer : offerDao.getAll()) {
+            if(offer.getContent().equals(includeOfferDtoRequest.getContent())) {
+                mayorCandidateDao.includeOffer(mayorCandidate1.getId(), offer);
+                return "";
+            }
+        }
+        IncludeOfferErrorCode includeOfferErrorCode = new IncludeOfferErrorCode();
+        includeOfferErrorCode.setErrorString(includeOfferErrorCode.getErrorString());
+        return new Gson().toJson(includeOfferDtoRequest);
     }
 
-    public String withdrawСandidacyWithMayor(String jsonRequest) {
+    public String withdrawCandidateWithMayor(String jsonRequest) {
+        if (Server.isStartingVoting()) {
+            return this.votingOperationsErrorCodeResponse;
+        }
         String response = JsonService.checkIsValidJson(jsonRequest);
         if(!response.equals("")) {
             return response;
         }
-        return null;
+        TokenVoterDtoRequest tokenVoterDtoRequest = new Gson().fromJson(jsonRequest, TokenVoterDtoRequest.class);
+        MayorCandidate mayorCandidate1 = null;
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(tokenVoterDtoRequest.getToken()) &&
+                    mayorCandidate.isConsentOnNomination()) {
+                mayorCandidate1 = mayorCandidate;
+            }
+        }
+        if(mayorCandidate1 == null) {
+            NotConsentOnMayorErrorCode notConsentOnMayorErrorCode = new NotConsentOnMayorErrorCode();
+            notConsentOnMayorErrorCode.setErrorString(notConsentOnMayorErrorCode.getNotConsent());
+            return new Gson().toJson(notConsentOnMayorErrorCode);
+        }
+        mayorCandidateDao.delete(tokenVoterDtoRequest.getToken());
+        return "";
     }
 
     public String deleteOfferFromYourProgram(String jsonRequest) {
-        return null;
+        if (Server.isStartingVoting()) {
+            return this.votingOperationsErrorCodeResponse;
+        }
+        String response = JsonService.checkIsValidJson(jsonRequest);
+        if(!response.equals("")) {
+            return response;
+        }
+        IncludeOfferDtoRequest includeOfferDtoRequest = new Gson().fromJson(jsonRequest, IncludeOfferDtoRequest.class);
+        MayorCandidate mayorCandidate1 = null;
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(includeOfferDtoRequest.getToken()) &&
+                    mayorCandidate.isConsentOnNomination()) {
+                mayorCandidate1 = mayorCandidate;
+            }
+        }
+        if(mayorCandidate1 == null) {
+            NotConsentOnMayorErrorCode notConsentOnMayorErrorCode = new NotConsentOnMayorErrorCode();
+            notConsentOnMayorErrorCode.setErrorString(notConsentOnMayorErrorCode.getNotConsent());
+            return new Gson().toJson(notConsentOnMayorErrorCode);
+        }
+        for(Offer offer : offerDao.getAll()) {
+            if(offer.getContent().equals(includeOfferDtoRequest.getContent()) &&
+                    !offer.getAuthor_token().equals(includeOfferDtoRequest.getToken())) {
+                mayorCandidateDao.deleteOffer(mayorCandidate1.getId(), offer);
+                return "";
+            }
+        }
+        IncludeOfferErrorCode includeOfferErrorCode = new IncludeOfferErrorCode();
+        includeOfferErrorCode.setErrorString(includeOfferErrorCode.getErrorString());
+        return new Gson().toJson(includeOfferDtoRequest);
     }
-
-    // удаление всех кандидатов
 }

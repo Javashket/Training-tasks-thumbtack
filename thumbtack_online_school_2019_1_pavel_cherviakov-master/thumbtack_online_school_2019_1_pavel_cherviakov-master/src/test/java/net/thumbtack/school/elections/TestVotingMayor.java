@@ -1,10 +1,7 @@
 package net.thumbtack.school.elections;
 
 import com.google.gson.Gson;
-import net.thumbtack.school.elections.dto.request.PutOnMayorDtoRequest;
-import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
-import net.thumbtack.school.elections.dto.request.VoteDtoRequest;
+import net.thumbtack.school.elections.dto.request.*;
 import net.thumbtack.school.elections.dto.response.ElectionDtoResponse;
 import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
 import net.thumbtack.school.elections.model.Offer;
@@ -74,8 +71,10 @@ public class TestVotingMayor extends Init {
         Server.voteForCandidate(jsonVoteRequest1);
         Server.voteForCandidate(jsonVoteRequest2);
 
-        ElectionDtoResponse expected = new ElectionDtoResponse("Мэром выбран " + requestRegister1.toString());
-        String jsonResponseSummarize = Server.summarize("");
+        ElectionDtoRequest electionDtoRequest = new ElectionDtoRequest("");
+        String jsonElectionDtoRequest = new Gson().toJson(electionDtoRequest);
+        ElectionDtoResponse expected = new ElectionDtoResponse("Мэром выбран " + requestRegister3.toString());
+        String jsonResponseSummarize = Server.summarize(jsonElectionDtoRequest);
         ElectionDtoResponse actual = new Gson().fromJson(jsonResponseSummarize, ElectionDtoResponse.class);
         assertEquals(expected.getResult(), actual.getResult());
     }
@@ -137,8 +136,10 @@ public class TestVotingMayor extends Init {
         Server.voteAgainstAllCandidates(jsonVoteRequest1);
         Server.voteAgainstAllCandidates(jsonVoteRequest2);
 
+        ElectionDtoRequest electionDtoRequest = new ElectionDtoRequest("");
+        String jsonElectionDtoRequest = new Gson().toJson(electionDtoRequest);
         ElectionDtoResponse expected = new ElectionDtoResponse("Выборы не состоялись.");
-        String jsonResponseSummarize = Server.summarize("");
+        String jsonResponseSummarize = Server.summarize(jsonElectionDtoRequest);
         ElectionDtoResponse actual = new Gson().fromJson(jsonResponseSummarize, ElectionDtoResponse.class);
         assertEquals(expected.getResult(), actual.getResult());
     }

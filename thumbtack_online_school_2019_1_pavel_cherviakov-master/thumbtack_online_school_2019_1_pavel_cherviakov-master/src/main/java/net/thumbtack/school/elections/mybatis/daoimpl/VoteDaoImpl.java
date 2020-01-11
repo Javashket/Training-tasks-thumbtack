@@ -3,7 +3,6 @@ package net.thumbtack.school.elections.mybatis.daoimpl;
 import net.thumbtack.school.elections.model.MayorCandidate;
 import net.thumbtack.school.elections.model.Vote;
 import net.thumbtack.school.elections.mybatis.dao.VoteDao;
-import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +14,13 @@ public class VoteDaoImpl extends DaoImplBase implements VoteDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(MayorCandidateDaoImpl.class);
 
     @Override
-    public Integer insert(Vote vote) {
-        LOGGER.debug("DAO insert Vote {}", vote);
+    public Integer insert(Vote vote, MayorCandidate mayorCandidate) {
+        LOGGER.debug("DAO insert Vote {}, {}", vote, mayorCandidate);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getVoteMapper(sqlSession).insert(vote);
+                getVoteMapper(sqlSession).insert(vote, mayorCandidate);
             } catch (RuntimeException ex) {
-                LOGGER.debug("Can't insert Vote {}", vote, ex);
+                LOGGER.debug("Can't insert Vote {}, {}", vote,mayorCandidate, ex);
                 sqlSession.rollback();
                 throw ex;
             }
@@ -57,7 +56,7 @@ public class VoteDaoImpl extends DaoImplBase implements VoteDao {
     }
 
     @Override
-    public Vote getByMayorCandidateId(int id) {
+    public List<Vote> getByMayorCandidateId(int id) {
         LOGGER.debug("DAO get Vote by Mayor Candidate id {}", id);
         try (SqlSession sqlSession = getSession()){
             return getVoteMapper(sqlSession).getByMayorCandidateId(id);

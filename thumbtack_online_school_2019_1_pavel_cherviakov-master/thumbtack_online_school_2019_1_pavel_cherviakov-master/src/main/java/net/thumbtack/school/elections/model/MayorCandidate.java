@@ -69,27 +69,6 @@ public class MayorCandidate {
         this.program.add(offer);
     }
 
-    //    public Integer getCountVoicesPros() {
-//        int count = 0;
-//        for(Map.Entry<Voter, Boolean> entry : votedVoters.entrySet()) {
-//            if (entry.getValue().equals(true) && entry.getKey().isActive()) {
-//                count++;
-//            }
-//        }
-//        return count;
-//    }
-//
-//    public Integer getCountVoicesCons() {
-//        int count = 0;
-//        for(Map.Entry<Voter, Boolean> entry : votedVoters.entrySet()) {
-//            if (entry.getValue().equals(false) && entry.getKey().isActive()) {
-//                count++;
-//            }
-//        }
-//        return count;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

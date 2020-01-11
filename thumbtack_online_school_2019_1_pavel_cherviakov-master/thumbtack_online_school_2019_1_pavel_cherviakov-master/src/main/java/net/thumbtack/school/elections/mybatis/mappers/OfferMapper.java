@@ -16,6 +16,10 @@ public interface OfferMapper {
     @Options(useGeneratedKeys = true)
     Integer insert(Offer offer);
 
+    @Update("UPDATE offer SET average_rating = #{average_rating} " +
+            " WHERE id = #{id} ")
+    void update(Offer offer);
+
     @Insert({"<script>",
             "INSERT INTO offer (author_token, average_rating, content) VALUES",
             "<foreach item='item' collection='list' separator=','>",
@@ -52,5 +56,9 @@ public interface OfferMapper {
     @Select("UPDATE offer SET author_token = null" +
             " WHERE id = #{id}")
     void updateSetEmptyAuthor(int id);
+
+    @Select("SELECT * FROM offer WHERE id IN(" +
+            " (SELECT offer_id FROM mayor_candidate_offer WHERE mayor_candidate_id = #{id}))")
+    List<Offer> getByMayorCandidateId(int id);
 
 }

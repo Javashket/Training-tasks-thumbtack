@@ -37,12 +37,13 @@ public class TestRateOffer extends Init {
         String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
         Server.addOffer(jsonRequestAddOffer);
         RateOfferDtoRequest requestRateOffer2 = new RateOfferDtoRequest(content, resultRegister2.getToken(), 4);
+        requestAddOffer.addRate(new Rating(resultRegister2.getToken(), 4));
         String jsonRequestRateOffer2 = new Gson().toJson(requestRateOffer2);
         Server.rateOffer(jsonRequestRateOffer2);
         TokenVoterDtoRequest tokenVoterRequest = new TokenVoterDtoRequest(resultRegister2.getToken());
         String jsonTokenVoterRequest = new Gson().toJson(tokenVoterRequest);
-        String jsonResponse5 = Server.getAllOffers(jsonTokenVoterRequest);
-        AllOffersDtoResponse allOffersDtoResponse = new Gson().fromJson(jsonResponse5, AllOffersDtoResponse.class);
+        String jsonResponseAllOffers = Server.getAllOffers(jsonTokenVoterRequest);
+        AllOffersDtoResponse allOffersDtoResponse = new Gson().fromJson(jsonResponseAllOffers, AllOffersDtoResponse.class);
         Offer actual = new Offer();
         for(Offer offer : allOffersDtoResponse.getOffers()) {
             if(offer.getContent().equals(content)) {
@@ -50,7 +51,6 @@ public class TestRateOffer extends Init {
             }
         }
         assertEquals(requestAddOffer.getRatings(), actual.getRatings());
-        // добавить проверку валидности токена во все методы
     }
 
     @Test

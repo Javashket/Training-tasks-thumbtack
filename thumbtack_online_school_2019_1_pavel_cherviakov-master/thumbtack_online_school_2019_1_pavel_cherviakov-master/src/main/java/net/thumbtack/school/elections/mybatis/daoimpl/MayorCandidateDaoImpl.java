@@ -1,8 +1,9 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
-import net.thumbtack.school.database.model.Trainee;
-import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
 import net.thumbtack.school.elections.model.MayorCandidate;
+import net.thumbtack.school.elections.model.Offer;
+import net.thumbtack.school.elections.mybatis.dao.MayorCandidateDao;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,36 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
     }
 
     @Override
+    public void includeOffer(int id, Offer offer) {
+        LOGGER.debug("DAO include Offer {}, {}", id, offer);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).includeOffer(id,offer);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't include Offer {}, {}", id, offer, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    @Override
+    public void deleteOffer(int id, Offer offer){
+        LOGGER.debug("DAO delete Offer {}, {}", id, offer);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getMayorCandidateMapper(sqlSession).deleteOffer(id, offer);
+            } catch (RuntimeException ex) {
+                LOGGER.debug("Can't delete Offer {}, {}", id, offer, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    @Override
     public void batchInsert(List<MayorCandidate> mayorCandidates) {
         LOGGER.debug("DAO insert MayorCandidates {}", mayorCandidates);
         try (SqlSession sqlSession = getSession()) {
@@ -46,11 +77,11 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
 
     @Override
     public MayorCandidate getById(int id) {
-        LOGGER.debug("DAO get Voter by id {}", id);
+        LOGGER.debug("DAO get MayorCandidate by id {}", id);
         try (SqlSession sqlSession = getSession()){
             return getMayorCandidateMapper(sqlSession).getById(id);
         } catch (RuntimeException ex) {
-            LOGGER.debug("Can't get Voter by id", ex);
+            LOGGER.debug("Can't get MayorCandidate by id", ex);
             throw ex;
         }
     }
@@ -72,11 +103,11 @@ public class MayorCandidateDaoImpl extends DaoImplBase implements MayorCandidate
 
     @Override
     public MayorCandidate getByTokenVoter(String token) {
-        LOGGER.debug("DAO get Voter by token {}", token);
+        LOGGER.debug("DAO get MayorCandidate by token {}", token);
         try (SqlSession sqlSession = getSession()){
             return getMayorCandidateMapper(sqlSession).getByTokenVoter(token);
         } catch (RuntimeException ex) {
-            LOGGER.debug("Can't get Voter by token", ex);
+            LOGGER.debug("Can't get MayorCandidate by token", ex);
             throw ex;
         }
     }

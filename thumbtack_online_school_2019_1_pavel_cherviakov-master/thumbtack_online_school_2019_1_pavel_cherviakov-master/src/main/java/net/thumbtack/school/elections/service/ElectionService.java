@@ -2,15 +2,17 @@ package net.thumbtack.school.elections.service;
 
 import com.google.gson.Gson;
 import net.thumbtack.school.elections.dto.request.ElectionDtoRequest;
-import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
+import net.thumbtack.school.elections.dto.request.IncludeOfferDtoRequest;
 import net.thumbtack.school.elections.dto.request.VoteDtoRequest;
 import net.thumbtack.school.elections.dto.response.ElectionDtoResponse;
 import net.thumbtack.school.elections.errors.election.FileErrorCode;
 import net.thumbtack.school.elections.errors.election.MayorErrorCode;
 import net.thumbtack.school.elections.errors.election.VotingOperationsErrorCode;
 import net.thumbtack.school.elections.errors.mayorcandidate.TokenMayorErrorCode;
+import net.thumbtack.school.elections.errors.offer.IncludeOfferErrorCode;
 import net.thumbtack.school.elections.errors.voter.TokenVoterErrorCode;
 import net.thumbtack.school.elections.model.MayorCandidate;
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.model.Vote;
 import net.thumbtack.school.elections.model.Voter;
 import net.thumbtack.school.elections.mybatis.dao.*;
@@ -24,44 +26,17 @@ public class ElectionService {
 
     private VoterDao voterDao;
     private OfferDao offerDao;
-    private RatingDao ratingDao;
     private MayorCandidateDao mayorCandidateDao;
     private VoteDao voteDao;
 
     public ElectionService() {
         this.offerDao = new OfferDaoImpl();
         this.voterDao = new VoterDaoImpl();
-        this.ratingDao = new RatingDaoImpl();
         this.mayorCandidateDao = new MayorCandidateDaoImpl();
         this.voteDao = new VoteDaoImpl();
     }
 
-    // выделить в 1 метод проверку старта првоерку токена
-
     public String voteAgainstAllCandidates(String jsonRequest) {
-        // нельзя голосовать за себя и против
-        // проверка кандидата м вэрах проверка токена
-        String response = JsonService.checkIsValidJson(jsonRequest);
-        if(!response.equals("")) {
-            return response;
-        }
-        TokenVoterDtoRequest tokenVoterDtoRequest = new Gson().fromJson(jsonRequest, TokenVoterDtoRequest.class);
-        Voter voter2 = voterDao.getByToken(tokenVoterDtoRequest.getToken());
-        if( voter2 == null) {
-            TokenVoterErrorCode tokenVoterErrorCode = new TokenVoterErrorCode();
-            return new Gson().toJson(tokenVoterErrorCode.setErrorString(tokenVoterErrorCode.getNotFoundToken()));
-        }
-        for(MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
-            Vote vote = new Vote(voter2,false);
-//            voteDao.insert(vote, mayorCandidate);
-        }
-
-        return "";
-    }
-
-    public String voteForCandidate(String jsonRequest) {
-        // нельзя голосовать за себя и против
-        // проверка кандидата м вэрах проверка токена
         String response = JsonService.checkIsValidJson(jsonRequest);
         if(!response.equals("")) {
             return response;
@@ -72,25 +47,48 @@ public class ElectionService {
             TokenVoterErrorCode tokenVoterErrorCode = new TokenVoterErrorCode();
             return new Gson().toJson(tokenVoterErrorCode.setErrorString(tokenVoterErrorCode.getNotFoundToken()));
         }
-        Voter voter1 = null;
+        for(MayorCandidate mayorCandidate: mayorCandidateDao.getAll()) {
+            Vote vote = new Vote(voter2,false);
+            voteDao.insert(vote, mayorCandidate);
+        }
+        return "";
+    }
+
+    public String voteForCandidate(String jsonRequest) {
+        String response = JsonService.checkIsValidJson(jsonRequest);
+        if(!response.equals("")) {
+            return response;
+        }
+        VoteDtoRequest voteDtoRequest = new Gson().fromJson(jsonRequest, VoteDtoRequest.class);
+        Voter voter2 = voterDao.getByToken(voteDtoRequest.getToken());
+        if( voter2 == null) {
+            TokenVoterErrorCode tokenVoterErrorCode = new TokenVoterErrorCode();
+            return new Gson().toJson(tokenVoterErrorCode.setErrorString(tokenVoterErrorCode.getNotFoundToken()));
+        }
+        String tokenMayor = null;
         for (Voter voter : voterDao.getAll()) {
             if(voter.hashCode() == voteDtoRequest.getRegisterVoterDtoRequest().hashCode()) {
-                voter1 = voter;
+                tokenMayor = voter.getToken();
                 break;
             }
         }
-        if(voter1.getToken() == null) {
+        MayorCandidate mayorCandidate1 = null;
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(tokenMayor)) {
+                mayorCandidate1 = mayorCandidate;
+            }
+        }
+        if(mayorCandidate1 == null) {
             TokenMayorErrorCode tokenMayorErrorCode = new TokenMayorErrorCode();
             return new Gson().toJson(tokenMayorErrorCode.setErrorString(tokenMayorErrorCode.getNotFoundToken()));
         }
-        if(voteDtoRequest.getToken().equals(voter1.getToken())) {
+        if(voteDtoRequest.getToken().equals(mayorCandidate1.getToken_voter())) {
             MayorErrorCode mayorErrorCode = new MayorErrorCode();
             mayorErrorCode.setErrorString(mayorErrorCode.getErrorVote());
             return new Gson().toJson(mayorErrorCode);
         }
-        // дописать за какого кандидата
         Vote vote = new Vote(voter2,true);
-        voteDao.insert(vote);
+        voteDao.insert(vote, mayorCandidate1);
         return "";
     }
 
@@ -104,7 +102,32 @@ public class ElectionService {
         if(!response.equals("")) {
             return response;
         }
-
+        IncludeOfferDtoRequest includeOfferDtoRequest = new Gson().fromJson(jsonRequest, IncludeOfferDtoRequest.class);
+        MayorCandidate mayorCandidate1 = null;
+        for (MayorCandidate mayorCandidate : mayorCandidateDao.getAll()) {
+            if(mayorCandidate.getToken_voter().equals(includeOfferDtoRequest.getToken())) {
+                mayorCandidate1 = mayorCandidate;
+                break;
+            }
+        }
+        if(mayorCandidate1 == null) {
+            TokenMayorErrorCode tokenMayorErrorCode = new TokenMayorErrorCode();
+            tokenMayorErrorCode.setErrorString(tokenMayorErrorCode.getNotFoundToken());
+            return new Gson().toJson(tokenMayorErrorCode);
+        }
+        Offer offer1 = null;
+        for (Offer offer : offerDao.getAll()) {
+            if(offer.getContent().equals(includeOfferDtoRequest.getContent())) {
+                offer1 = offer;
+                break;
+            }
+        }
+        if(offer1 == null) {
+            IncludeOfferErrorCode includeOfferErrorCode = new IncludeOfferErrorCode();
+            includeOfferErrorCode.setErrorString(includeOfferErrorCode.getNotFoundOffer());
+            return new Gson().toJson(includeOfferErrorCode);
+        }
+        mayorCandidateDao.includeOffer(mayorCandidate1.getId(), offer1);
         return "";
     }
 
@@ -149,6 +172,6 @@ public class ElectionService {
                     voterDao.getByToken(mayorCandidate1.getToken_voter()).toString());
         }
         Server.stopServer(file.getPath());
-        return new Gson().toJson(electionDtoRequest);
+        return new Gson().toJson(electionDtoResponse);
     }
 }

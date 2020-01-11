@@ -7,8 +7,10 @@ import net.thumbtack.school.elections.dto.request.RegisterVoterDtoRequest;
 import net.thumbtack.school.elections.dto.request.TokenVoterDtoRequest;
 import net.thumbtack.school.elections.dto.response.AllCandidatesDtoResponse;
 import net.thumbtack.school.elections.dto.response.RegisterVoterDtoResponse;
+import net.thumbtack.school.elections.errors.mayorcandidate.AlreadyConsentOnMayor;
 import net.thumbtack.school.elections.errors.mayorcandidate.TokenMayorErrorCode;
 import net.thumbtack.school.elections.model.MayorCandidate;
+import net.thumbtack.school.elections.model.Offer;
 import net.thumbtack.school.elections.server.Server;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +33,11 @@ public class TestConsentOnNomination extends Init {
         String jsonResponseRegister2 = Server.registerVoter(jsonRequestRegister2);
         RegisterVoterDtoResponse resultRegister2 = new Gson().fromJson(jsonResponseRegister2, RegisterVoterDtoResponse.class);
 
+        String content = "fghfgh";
+        Offer requestAddOffer = new Offer(resultRegister2.getToken(), content);
+        String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer);
+
         PutOnMayorDtoRequest putOnMayorRequest1 = new PutOnMayorDtoRequest(resultRegister1.getToken(), requestRegister2);
         String jsonPutOnMayorRequest1 = new Gson().toJson(putOnMayorRequest1);
         Server.putOnMayor(jsonPutOnMayorRequest1);
@@ -52,10 +59,7 @@ public class TestConsentOnNomination extends Init {
             }
         }
         assertTrue(actual);
-
-
-        // добавить включений программ
-
+        assertEquals(requestAddOffer, allCandidatesDtoResponse.getMayorCandidates().get(0).getProgram().get(0));
     }
 
     @Test
@@ -88,10 +92,35 @@ public class TestConsentOnNomination extends Init {
 
     @Test
     public void testConsentAlreadyAgreedOnMayorCandidate(){
+        RegisterVoterDtoRequest requestRegister1 = new RegisterVoterDtoRequest("Иван1","Иванов1",
+                "Иванович1","улица1","дом1", "561","logpass1","passlogpass1");
+        String jsonRequestRegister1 = new Gson().toJson(requestRegister1);
+        String jsonResponseRegister1 = Server.registerVoter(jsonRequestRegister1);
+        RegisterVoterDtoResponse resultRegister1 = new Gson().fromJson(jsonResponseRegister1, RegisterVoterDtoResponse.class);
 
+        RegisterVoterDtoRequest requestRegister2 = new RegisterVoterDtoRequest("Иван2","Иванов2",
+                "Иванович2","улица2","дом2", "562","logpass2","passlogpass2");
+        String jsonRequestRegister2 = new Gson().toJson(requestRegister2);
+        String jsonResponseRegister2 = Server.registerVoter(jsonRequestRegister2);
+        RegisterVoterDtoResponse resultRegister2 = new Gson().fromJson(jsonResponseRegister2, RegisterVoterDtoResponse.class);
 
+        String content = "fghfgh";
+        Offer requestAddOffer = new Offer(resultRegister2.getToken(), content);
+        String jsonRequestAddOffer = new Gson().toJson(requestAddOffer);
+        Server.addOffer(jsonRequestAddOffer);
 
+        PutOnMayorDtoRequest putOnMayorRequest1 = new PutOnMayorDtoRequest(resultRegister1.getToken(), requestRegister2);
+        String jsonPutOnMayorRequest1 = new Gson().toJson(putOnMayorRequest1);
+        Server.putOnMayor(jsonPutOnMayorRequest1);
 
+        TokenVoterDtoRequest tokenVoterRequest2 = new TokenVoterDtoRequest(resultRegister2.getToken());
+        String jsonTokenVoterRequest2 = new Gson().toJson(tokenVoterRequest2);
+        Server.consentOnPositionOnMayor(jsonTokenVoterRequest2);
+        String jsonConsentOnPositionOnMayorResponse =  Server.consentOnPositionOnMayor(jsonTokenVoterRequest2);
+        AlreadyConsentOnMayor actual = new Gson().fromJson(jsonConsentOnPositionOnMayorResponse, AlreadyConsentOnMayor.class);
+        AlreadyConsentOnMayor expected = new AlreadyConsentOnMayor();
+        expected.setErrorString(expected.getAlreadyConfirm());
+
+        assertEquals(expected.getErrorString(), actual.getErrorString());
     }
-
 }

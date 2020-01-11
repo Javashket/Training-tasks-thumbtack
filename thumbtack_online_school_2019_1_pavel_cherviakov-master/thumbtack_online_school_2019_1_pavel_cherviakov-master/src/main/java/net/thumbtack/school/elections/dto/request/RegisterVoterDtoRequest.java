@@ -78,4 +78,14 @@ public class RegisterVoterDtoRequest {
     public int hashCode() {
         return Objects.hash(getFirstName(), getLastName(), getPatronymic(), getStreet(), getHouse(), getApartment());
     }
+
+    @Override
+    public String toString() {
+        return   "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment;
+    }
 }

@@ -1,6 +1,5 @@
 package net.thumbtack.school.elections.mybatis.daoimpl;
 
-
 import net.thumbtack.school.elections.mybatis.mappers.*;
 import net.thumbtack.school.elections.mybatis.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
